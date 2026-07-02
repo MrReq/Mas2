@@ -1,12 +1,9 @@
 package Views.Loging;
 
 import Models.Boss;
-import Enums.Sex;
-import SecondaryClasses.ObjectPlus;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDate;
 
 public class CreateBossView extends JFrame {
 
@@ -16,58 +13,88 @@ public class CreateBossView extends JFrame {
 
     public CreateBossView() {
 
-        setTitle("Utwórz konto szefa");
-        setSize(420, 300);
-        setLocationRelativeTo(null);
+        setTitle("Create Boss Account");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
 
         JPanel panel = new JPanel(new GridBagLayout());
+
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Tytuł
-        JLabel title = new JLabel("Tworzenie konta szefa", SwingConstants.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 18));
+        //=================================================
+        // TITLE
+        //=================================================
+
+        JLabel title = new JLabel(
+                "Create Boss Account",
+                SwingConstants.CENTER
+        );
+
+        title.setFont(new Font("Arial", Font.BOLD, 22));
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
+
         panel.add(title, gbc);
 
         gbc.gridwidth = 1;
 
-        // Imię
+        //=================================================
+        // FIRST NAME
+        //=================================================
+
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel("Imię:"), gbc);
+
+        panel.add(new JLabel("First name:"), gbc);
 
         gbc.gridx = 1;
-        firstNameField = new JTextField(15);
+
+        firstNameField = new JTextField(20);
+
         panel.add(firstNameField, gbc);
 
-        // Nazwisko
+        //=================================================
+        // LAST NAME
+        //=================================================
+
         gbc.gridx = 0;
         gbc.gridy = 2;
-        panel.add(new JLabel("Nazwisko:"), gbc);
+
+        panel.add(new JLabel("Last name:"), gbc);
 
         gbc.gridx = 1;
-        lastNameField = new JTextField(15);
+
+        lastNameField = new JTextField(20);
+
         panel.add(lastNameField, gbc);
 
-        // Hasło
+        //=================================================
+        // PASSWORD
+        //=================================================
+
         gbc.gridx = 0;
         gbc.gridy = 3;
-        panel.add(new JLabel("Hasło:"), gbc);
+
+        panel.add(new JLabel("Password:"), gbc);
 
         gbc.gridx = 1;
-        passwordField = new JPasswordField(15);
+
+        passwordField = new JPasswordField(20);
+
         panel.add(passwordField, gbc);
 
-        // Przycisk
-        JButton createButton = new JButton("Utwórz konto");
+        //=================================================
+        // BUTTONS
+        //=================================================
+
+        JButton createButton = new JButton("Create account");
+
+        JButton backButton = new JButton("Back");
 
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -75,32 +102,92 @@ public class CreateBossView extends JFrame {
 
         panel.add(createButton, gbc);
 
+        gbc.gridy = 5;
+
+        panel.add(backButton, gbc);
+
         add(panel);
 
         createButton.addActionListener(e -> createBoss());
+
+        backButton.addActionListener(e -> {
+
+            dispose();
+
+            new LoginSelectionView().setVisible(true);
+
+        });
+
     }
+
+    //=================================================
+    // CREATE BOSS
+    //=================================================
 
     private void createBoss() {
 
         String name = firstNameField.getText().trim();
+
         String surname = lastNameField.getText().trim();
+
         String password = new String(passwordField.getPassword());
 
-        if (name.isBlank() || surname.isBlank() || password.isBlank()) {
+        //=================================================
+        // REQUIRED FIELDS
+        //=================================================
+
+        if (name.isBlank()
+                || surname.isBlank()
+                || password.isBlank()) {
 
             JOptionPane.showMessageDialog(
+
                     this,
-                    "Fill all fields!",
-                    "Error",
+
+                    "Please fill in all fields.",
+
+                    "Missing data",
+
                     JOptionPane.ERROR_MESSAGE
+
             );
 
             return;
+
         }
 
-        //========================================================
-        // CHECK IF BOSS ALREADY EXISTS
-        //========================================================
+        //=================================================
+        // PASSWORD VALIDATION
+        //=================================================
+
+        if (!isPasswordValid(password)) {
+
+            JOptionPane.showMessageDialog(
+
+                    this,
+
+                    """
+                    Password must contain:
+
+                    • at least 8 characters
+                    • one uppercase letter
+                    • one digit
+                    • one special character
+                    """,
+
+                    "Invalid password",
+
+                    JOptionPane.ERROR_MESSAGE
+
+            );
+
+            return;
+
+        }
+
+        //=================================================
+        // CHECK DUPLICATE
+        //=================================================
 
         for (Boss boss : Boss.getBossExtent()) {
 
@@ -109,21 +196,28 @@ public class CreateBossView extends JFrame {
                     boss.getPeronSurname().equalsIgnoreCase(surname)) {
 
                 JOptionPane.showMessageDialog(
+
                         this,
-                        "Boss already exists!",
-                        "Error",
+
+                        "Boss already exists.",
+
+                        "Duplicate",
+
                         JOptionPane.ERROR_MESSAGE
+
                 );
 
                 return;
+
             }
+
         }
 
-        //========================================================
+        //=================================================
         // CREATE NEW BOSS
-        //========================================================
+        //=================================================
 
-        Boss boss = new Boss(
+        new Boss(
 
                 name,
 
@@ -132,13 +226,16 @@ public class CreateBossView extends JFrame {
                 password
 
         );
-        System.out.println(ObjectPlus.getExtent(Boss.class).size());
 
         JOptionPane.showMessageDialog(
 
                 this,
 
-                "Boss has been created successfully."
+                "Boss account has been created successfully.",
+
+                "Success",
+
+                JOptionPane.INFORMATION_MESSAGE
 
         );
 
@@ -147,4 +244,25 @@ public class CreateBossView extends JFrame {
         new BossLoginView().setVisible(true);
 
     }
+
+    //=================================================
+    // PASSWORD VALIDATION
+    //=================================================
+
+    private boolean isPasswordValid(String password) {
+
+        if (password == null) {
+
+            return false;
+
+        }
+
+        return password.matches(
+
+                "^(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$"
+
+        );
+
+    }
+
 }

@@ -178,6 +178,8 @@ public class Client extends Person {
 
     }
 
+
+
     //====================================================
     // BUSINESS METHODS
     //====================================================
@@ -194,7 +196,7 @@ public class Client extends Person {
 
         setSatisfactionOfTheService(satisfaction);
 
-        waiter.waitersGrades.add(satisfaction);
+        waiter.getWaitersGrades().add(satisfaction);
 
         waiter.setGrade(satisfaction);
 

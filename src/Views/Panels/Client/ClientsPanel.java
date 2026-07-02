@@ -1,4 +1,4 @@
-package Views.Panels;
+package Views.Panels.Client;
 
 
 import javax.swing.*;

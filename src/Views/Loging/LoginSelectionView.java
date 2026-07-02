@@ -1,6 +1,8 @@
 package Views.Loging;
 
 
+import SecondaryClasses.ObjectPlus;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,11 +10,12 @@ public class LoginSelectionView extends JFrame {
 
     public LoginSelectionView() {
 
-        setTitle("Coffee House - Logowanie");
+        setTitle("Coffee House - Logowanie (LoginSelectionView)");
         setSize(400, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout(10, 10));
@@ -26,10 +29,12 @@ public class LoginSelectionView extends JFrame {
         JButton clientButton = new JButton("Zaloguj jako klient");
         JButton employeeButton = new JButton("Zaloguj jako pracownik");
         JButton createBossButton = new JButton("Utwórz szefa");
+        JButton clearextensionButton = new JButton("Wyczyśc całą ekstensję");
 
         buttonsPanel.add(clientButton);
         buttonsPanel.add(employeeButton);
         buttonsPanel.add(createBossButton);
+        buttonsPanel.add(clearextensionButton);
 
         panel.add(title, BorderLayout.NORTH);
         panel.add(buttonsPanel, BorderLayout.CENTER);
@@ -41,7 +46,7 @@ public class LoginSelectionView extends JFrame {
         clientButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(this,
                     "Wybrano logowanie jako klient.");
-            new ClientLoginView().setVisible(true);
+            new LoginOrRegisterView().setVisible(true);
         });
 
         employeeButton.addActionListener(e -> {
@@ -53,5 +58,10 @@ public class LoginSelectionView extends JFrame {
             dispose();
             new CreateBossView().setVisible(true);
         });
+
+        clearextensionButton.addActionListener(e -> {
+            ObjectPlus.clearExtents();
+        });
     }
+
 }

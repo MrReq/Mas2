@@ -1,9 +1,9 @@
 package Views.Boss;
 
 
-import Models.Boss;
 import Views.Loging.LoginSelectionView;
 import Views.Panels.*;
+import Views.Panels.Client.ClientsPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ public class BossDashboardView extends JFrame {
 
     public BossDashboardView() {
 
-        setTitle("Coffee House Management System - Owner Panel");
+        setTitle("Coffee House Management System - Owner Panel (BossDashboardView)");
         setSize(1200, 750);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -2,6 +2,7 @@ package Models;
 
 import Enums.AllPersonTypes;
 import Enums.Sex;
+import SecondaryClasses.ObjectPlus;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,118 +12,242 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-class Waiter extends Employee {
-    //EXTENT SESSION
-    /** Extent session contains:
-     * <br>to String method</br>
-     * <br>{@linkplain List} in implementation as {@linkplain ArrayList} called extent that holds all instances</br>
-     * <br>Private Static method "addWaiter" which adds instance of {@linkplain Waiter} to extent collection</br>
-     * <br>Private Static method "removeWaiter" which removes instance of {@linkplain Waiter} from extent collection</br>
-     * <br>Public Static method "showExtent" which displays all instances of {@linkplain Waiter} line by line.</br>
+public class Waiter extends Employee {
+
+    //====================================================
+    // ATTRIBUTES
+    //====================================================
+
+    /**
+     * Total tips earned.
      */
+    private float waitersTip;
+
+    /**
+     * Average grade.
+     */
+    private int waitersGrade;
+
+    /**
+     * List of all received grades.
+     */
+    private List<Integer> waitersGrades = new ArrayList<>();
+
+    /**
+     * Overlapping example.
+     */
+    private final EnumSet<AllPersonTypes> personKind =
+            EnumSet.of(AllPersonTypes.Waiter);
+
+    //====================================================
+    // CONSTRUCTORS
+    //====================================================
+
+    public Waiter() {
+
+        super();
+
+    }
+
+    public Waiter(String name,
+                  String surname,
+                  LocalDate birthDate,
+                  Sex sex,
+                  float salary) {
+
+        super(name, surname, birthDate, sex, salary);
+
+    }
+
+    //====================================================
+    // EXTENT
+    //====================================================
+
+    @SuppressWarnings("unchecked")
+    public static List<Waiter> getWaiterExtent() {
+
+        return (List<Waiter>) (List<?>) ObjectPlus.getExtent(Waiter.class);
+
+    }
+
+    //====================================================
+    // GETTERS
+    //====================================================
+
+    public float getWaitersTip() {
+
+        return waitersTip;
+
+    }
+
+    public int getWaitersGrade() {
+
+        return waitersGrade;
+
+    }
+
+    public List<Integer> getWaitersGrades() {
+
+        return waitersGrades;
+
+    }
+
+    //====================================================
+    // SETTERS
+    //====================================================
+
+    public void setWaitersTip(float waitersTip) {
+
+        this.waitersTip = waitersTip;
+
+    }
+
+    public void addTip(float tip) {
+
+        if (tip > 0) {
+
+            waitersTip += tip;
+
+        }
+
+    }
+
+    public void addGrade(int grade) {
+
+        if (grade < 1 || grade > 5) {
+
+            throw new IllegalArgumentException(
+                    "Grade must be between 1 and 5."
+            );
+
+        }
+
+        waitersGrades.add(grade);
+
+        waitersGrade = calculateAverageGrade();
+
+    }
+
+    //====================================================
+    // BUSINESS METHODS
+    //====================================================
+
+    @Override
+    public String getPrivileges() {
+
+        return "WAITER";
+
+    }
+
+    public void serveTable() {
+
+        System.out.println(
+
+                getPersonName()
+                        + " is serving customers."
+
+        );
+
+    }
+
+    private int calculateAverageGrade() {
+
+        if (waitersGrades.isEmpty()) {
+
+            return 0;
+
+        }
+
+        int sum = 0;
+
+        for (Integer grade : waitersGrades) {
+
+            sum += grade;
+
+        }
+
+        return Math.round((float) sum / waitersGrades.size());
+
+    }
+
+    //====================================================
+    // SERIALIZATION
+    //====================================================
+
+    @Override
+    protected void write(DataOutputStream stream)
+            throws IOException {
+
+        super.write(stream);
+
+        stream.writeFloat(waitersTip);
+
+        stream.writeInt(waitersGrade);
+
+        stream.writeInt(waitersGrades.size());
+
+        for (Integer grade : waitersGrades) {
+
+            stream.writeInt(grade);
+
+        }
+
+    }
+
+    @Override
+    protected void read(DataInputStream stream)
+            throws IOException {
+
+        super.read(stream);
+
+        waitersTip = stream.readFloat();
+
+        waitersGrade = stream.readInt();
+
+        int size = stream.readInt();
+
+        waitersGrades = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+
+            waitersGrades.add(stream.readInt());
+
+        }
+
+    }
+
+    //====================================================
+    // OBJECT METHODS
+    //====================================================
+
     @Override
     public String toString() {
-        return "Waiter: " + personName + " "+peronSurname ;
-    }
-    private static List<Waiter> extent = new ArrayList<>();
-    private static void addWaiter(Waiter waiter) {
-        extent.add(waiter);
-    }
-    private static void removeWaiter(Waiter waiter) {
-        extent.remove(waiter);
-    }
-    public static void showExtent() {
-        System.out.println("Extent of the class: " + Waiter.class.getName());
-        for (Waiter waiter : extent) {
-            System.out.println(waiter);
-        }
-    }
-    protected void write(DataOutputStream stream) throws IOException {
-        super.write(stream);
-        stream.writeFloat(waitersTip);
-        stream.writeInt(waitersGrade);
-        stream.writeInt(waitersGrades.size());
-        for(Integer a : waitersGrades ){
-            stream.writeUTF(String.valueOf(a));
-        }
-    }
-    protected void read(DataInputStream stream) throws IOException {
-        super.read(stream);
-        waitersTip = stream.readFloat();
-        waitersGrade = stream.readInt();
-        int size = stream.readInt();
-        waitersGrades = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            String waitersGradesString = stream.readUTF();
-            waitersGrades.add(Integer.valueOf(waitersGradesString));
-        }
-    }
-    public static void writeExtent(DataOutputStream stream) throws IOException {
-        // Number of objects
-        stream.writeInt(extent.size());
-        for (Waiter waiter : extent) {
-            waiter.write(stream);
-        }
-    }
-    public static void readExtent(DataInputStream stream) throws IOException {
-        Waiter waiter = null;
-        // Get the number of written objects
-        int objectCount = stream.readInt();
-        // remove the current extent
-        extent.clear();
-        for (int i = 0; i < objectCount; i++) {
-            waiter = new Waiter();
-            waiter.read(stream);
-        }
-    }
-    //EXTENT SESSION END
-    //FIELDS SESSION START
-    /**Simple, Single, Required, Object, Concrete Attribute "waitersTip" typed {@linkplain Float}
-     */
-    float waitersTip;
-    /**Simple, Single, Required, Object, Concrete Attribute "waitersGrade" typed {@linkplain Integer}
-     */
-    int waitersGrade;
-    /**Complex, Repeatable, Optional, Object, Concrete Attribute "waitersGrades" typed {@linkplain List}
-     */
-    List<Integer> waitersGrades = new ArrayList<>();
-    //FIELDS SESSION END
-    //CONSTRUCTORS, GETTERS, SETTERS SESSION START
-    public Waiter(String name, String surname, LocalDate dateOfBirth, Sex sex, float salary) {
-        super(name, surname, dateOfBirth, sex, salary);
-        addWaiter(this);
-    }
-    public Waiter() {
-    }
-    /**Public method "setGrade" as a setter
-     * @param grade
-     * @return : None
-     */
-    public void setGrade(int grade) {
-        this.waitersGrade = countAverageGrade();
-    }
-    //CONSTRUCTORS, GETTERS, SETTERS SESSION END
-    //METHODS SESSION START
-    /**Private object method "countAverageGrade"
-     * @param : None
-     * @return : average from all grades
-     */
-    private int countAverageGrade() {
-        if (waitersGrades == null || waitersGrades.isEmpty()) {
-            return 0;
-        }
-        int sum = 0;
-        for (Integer number : waitersGrades) {
-            sum += number; // zakładam enum/int
-        }
-        return sum / waitersGrades.size();
-    }
-    public void serveTable() {
-        System.out.println(
-                "I'm Serving table"
+
+        return String.format(
+
+                "Waiter{id=%d, name='%s %s', salary=%.2f, grade=%d, tips=%.2f}",
+
+                employeeID,
+
+                personName,
+
+                peronSurname,
+
+                employeeSalary,
+
+                waitersGrade,
+
+                waitersTip
+
         );
+
     }
-    //METHODS SESSION END
-    //OVERLAPPING
-    private EnumSet<AllPersonTypes> personKind =  EnumSet.of(AllPersonTypes.Waiter);
+
+    public void setGrade(int satisfaction) {
+        int average = 0;
+        for(int a : waitersGrades){
+            average += a;
+        }
+         waitersGrade = average / waitersGrades.size();
+    }
 }

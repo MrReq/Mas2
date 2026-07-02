@@ -3,6 +3,7 @@ package Views.Loging;
 
 import Enums.Citizenship;
 import Enums.Sex;
+import Models.Boss;
 import Models.Client;
 import Models.Person;
 
@@ -39,11 +40,12 @@ public class CreateClientView extends JFrame {
 
     private void initializeFrame() {
 
-        setTitle("Coffee House - Client Registration");
+        setTitle("Coffee House - Client Registration (CreateClientView)");
         setSize(550, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     }
 
@@ -169,7 +171,7 @@ public class CreateClientView extends JFrame {
 
     private void initializeListeners() {
 
-        registerButton.addActionListener(e -> registerClient());
+        registerButton.addActionListener(e -> createClient());
 
         backButton.addActionListener(e -> {
 
@@ -181,7 +183,7 @@ public class CreateClientView extends JFrame {
 
     }
 
-    private void registerClient() {
+    private void createClient() {
 
         String name =
                 firstNameField.getText().trim();
@@ -218,6 +220,25 @@ public class CreateClientView extends JFrame {
 
         boolean hasClubCard =
                 clubCardCheckBox.isSelected();
+
+        for (Client client : Client.getClientExtent()) {
+
+            if (client.getPersonName().equalsIgnoreCase(name)
+                    && client.getPeronSurname().equalsIgnoreCase(surname)
+                    && client.getPersonSex().equals(sex)
+                    && client.hasClubCard() == hasClubCard)
+                    {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Client already exists!",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+
+                return;
+            }
+        }
 
         new Client(
 

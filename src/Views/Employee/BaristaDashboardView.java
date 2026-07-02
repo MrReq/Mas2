@@ -1,0 +1,126 @@
+package Views.Employee;
+
+import Models.Barista;
+import Views.Loging.*;
+import Views.Panels.Barista.BaristaMenuPanel;
+import Views.Panels.Barista.BaristaOrdersPanel;
+import Views.Panels.Barista.BaristaPrepareCoffeePanel;
+import Views.Panels.Barista.BaristaStatisticsPanel;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class BaristaDashboardView extends JFrame {
+
+    private final Barista loggedBarista;
+
+    private JTabbedPane tabbedPane;
+
+    public BaristaDashboardView(Barista loggedBarista) {
+
+        this.loggedBarista = loggedBarista;
+
+        initializeFrame();
+
+        initializeComponents();
+
+        initializeLayout();
+
+    }
+
+    //=================================================
+    // FRAME
+    //=================================================
+
+    private void initializeFrame() {
+
+        setTitle("Coffee House - Barista Dashboard");
+
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    }
+
+    //=================================================
+    // COMPONENTS
+    //=================================================
+
+    private void initializeComponents() {
+
+        tabbedPane = new JTabbedPane();
+
+        tabbedPane.addTab(
+                "Orders",
+                new BaristaOrdersPanel(loggedBarista)
+        );
+
+        tabbedPane.addTab(
+                "Prepare Coffee",
+                new BaristaPrepareCoffeePanel(loggedBarista)
+        );
+
+        tabbedPane.addTab(
+                "Menu",
+                new BaristaMenuPanel()
+        );
+
+        tabbedPane.addTab(
+                "Statistics",
+                new BaristaStatisticsPanel(loggedBarista)
+        );
+
+    }
+
+    //=================================================
+    // LAYOUT
+    //=================================================
+
+    private void initializeLayout() {
+
+        setLayout(new BorderLayout());
+
+        add(createTopPanel(), BorderLayout.NORTH);
+
+        add(tabbedPane, BorderLayout.CENTER);
+
+    }
+
+    //=================================================
+    // TOP PANEL
+    //=================================================
+
+    private JPanel createTopPanel() {
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JLabel title = new JLabel(
+
+                "Logged as: "
+                        + loggedBarista.getPersonName()
+                        + " "
+                        + loggedBarista.getPeronSurname()
+
+        );
+
+        title.setFont(new Font("Arial", Font.BOLD, 22));
+
+        JButton logoutButton = new JButton("Logout");
+
+        logoutButton.addActionListener(e -> {
+
+            dispose();
+
+            new LoginSelectionView().setVisible(true);
+
+        });
+
+        panel.add(title, BorderLayout.WEST);
+
+        panel.add(logoutButton, BorderLayout.EAST);
+
+        return panel;
+
+    }
+
+}

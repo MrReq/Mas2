@@ -30,11 +30,12 @@ public class BossLoginView extends JFrame {
 
     private void initializeFrame() {
 
-        setTitle("Coffee House - Owner Login");
+        setTitle("Coffee House - Owner Login (BossLoginView)");
         setSize(450,350);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     }
 

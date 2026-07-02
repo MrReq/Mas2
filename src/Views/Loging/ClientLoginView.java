@@ -22,7 +22,6 @@ public class ClientLoginView extends JFrame {
     private JCheckBox clubCardCheckBox;
 
     private JButton loginButton;
-    private JButton registerButton;
     private JButton backButton;
 
     public ClientLoginView() {
@@ -36,11 +35,12 @@ public class ClientLoginView extends JFrame {
 
     private void initializeFrame() {
 
-        setTitle("Coffee House - Client Login");
+        setTitle("Coffee House - Client Login (ClientLoginView)");
         setSize(500, 420);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     }
 
@@ -68,7 +68,6 @@ public class ClientLoginView extends JFrame {
 
         loginButton = new JButton("Login");
 
-        registerButton = new JButton("Register");
 
         backButton = new JButton("Back");
 
@@ -148,7 +147,6 @@ public class ClientLoginView extends JFrame {
 
         gbc.gridx = 1;
 
-        panel.add(registerButton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -162,16 +160,6 @@ public class ClientLoginView extends JFrame {
     }
 
     private void initializeListeners() {
-
-        loginButton.addActionListener(e -> login());
-
-        registerButton.addActionListener(e -> {
-
-            dispose();
-
-            new CreateClientView().setVisible(true);
-
-        });
 
         backButton.addActionListener(e -> {
 

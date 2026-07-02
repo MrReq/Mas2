@@ -35,7 +35,7 @@ public class ClientDashboardView extends JFrame {
 
     private void initializeFrame() {
 
-        setTitle("Coffee House - Client Panel");
+        setTitle("Coffee House - Client Panel (ClientDashboardView)");
 
         setSize(1000,700);
 

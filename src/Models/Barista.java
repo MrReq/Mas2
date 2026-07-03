@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Barista extends Employee {
+    private static final long serialVersionUID = 1L;
 
     //====================================================
     // ATTRIBUTES

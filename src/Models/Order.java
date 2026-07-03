@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 public class Order extends ObjectPlus{
+    private static final long serialVersionUID = 1L;
     //=========================================================
     // EXTENT
     //=========================================================

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Americano extends Coffee implements Preparable {
+    private static final long serialVersionUID = 1L;
     public Americano(String name, float price, boolean available, String description, TemperatureOfTheService temperature) {
     }
 

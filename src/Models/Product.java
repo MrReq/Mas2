@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Product extends ObjectPlus implements Preparable {
+    private static final long serialVersionUID = 1L;
     //EXTENT SESSION
     /**
      * Extent session contains:

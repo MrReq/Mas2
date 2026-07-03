@@ -6,6 +6,7 @@ import java.util.List;
 import Enums.TypeOfMilk;
 import Enums.TemperatureOfTheService;
 public class Milk extends Drink {
+    private static final long serialVersionUID = 1L;
     //EXTENT SESSION
     /** Extent session contains:
      * <br>to String method</br>

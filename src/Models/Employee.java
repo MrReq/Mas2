@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Employee extends Person {
+    private static final long serialVersionUID = 1L;
     //EXTENT SESSION
     /**
      * Extent session contains:

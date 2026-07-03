@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Preparation {
+    private static final long serialVersionUID = 1L;
     //EXTENT SESSION
     @Override
     public String toString() {

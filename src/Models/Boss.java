@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Boss extends Person {
+    private static final long serialVersionUID = 1L;
 
     //=================================================
     // FIELDS

@@ -14,6 +14,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class Waiter extends Employee {
+    private static final long serialVersionUID = 1L;
 
     //====================================================
     // ATTRIBUTES

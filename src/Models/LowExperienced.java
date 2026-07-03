@@ -8,6 +8,7 @@ import Enums.Sex;
 import Enums.TypeOfMeal;
 import Enums.TypeOfMilk;
 public class LowExperienced extends Employee {
+    private static final long serialVersionUID = 1L;
     //EXTENT SESSION
     /** Extent session contains:
      * <br>to String method</br>

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Person extends ObjectPlus {
+    private static final long serialVersionUID = 1L;
     public Person(String name, String surname) {
         this.personName = name;
         this.peronSurname = surname;

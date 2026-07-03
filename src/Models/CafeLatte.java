@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CafeLatte extends Coffee implements Preparable {
+    private static final long serialVersionUID = 1L;
     public CafeLatte() {
     }
     //EXTENT SESSION

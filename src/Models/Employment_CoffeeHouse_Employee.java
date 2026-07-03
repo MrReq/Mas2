@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Employment_CoffeeHouse_Employee {
+    private static final long serialVersionUID = 1L;
     //EXTENT SESSION
     /** Extent session contains:
      * <br>to String method</br>

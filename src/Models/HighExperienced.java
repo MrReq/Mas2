@@ -7,6 +7,7 @@ import java.util.List;
 import Enums.Sex;
 
 public class HighExperienced extends Employee {
+    private static final long serialVersionUID = 1L;
     //EXTENT SESSION
     /** Extent session contains:
      * <br>to String method</br>

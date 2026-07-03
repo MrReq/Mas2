@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Random;
 
 public class WorkingClient extends Employee implements IClient {
+    private static final long serialVersionUID = 1L;
     Client client;
     public WorkingClient(String firstName, String lastName, LocalDate birthDate, Sex sex, float salary, boolean hasClubCard) {
         super(firstName, lastName, birthDate, sex,  salary);

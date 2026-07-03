@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class CoffeeHouse {
+    private static final long serialVersionUID = 1L;
     //EXTENT SESSION
     /** Extent session contains:
      * <br>to String method</br>

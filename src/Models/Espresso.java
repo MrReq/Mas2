@@ -8,6 +8,7 @@ import Enums.TemperatureOfTheService;
 import Interfaces.Preparable;
 
 public class Espresso extends Coffee  implements Preparable {
+    private static final long serialVersionUID = 1L;
     //EXTENT SESSION
     /** Extent session contains:
      * <br>to String method</br>

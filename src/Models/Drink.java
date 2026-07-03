@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Drink extends Product implements Preparable {
+    private static final long serialVersionUID = 1L;
     //EXTENT SESSION
     /** Extent session contains:
      * <br>to String method</br>

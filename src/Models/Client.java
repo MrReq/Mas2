@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Client extends Person {
+    private static final long serialVersionUID = 1L;
     // ====================================================ATTRIBUTES====================================================
     private int clientID;
 

@@ -202,6 +202,15 @@ public class Order extends ObjectPlus{
         orderStatus = OrderStatus.READY;
 
     }
+
+    public void completeOrder() {
+        if (orderStatus != OrderStatus.PREPARING) {
+            throw new IllegalStateException(
+                    "Only In preparing order can be completed."
+            );
+        }
+        orderStatus = OrderStatus.READY;
+    }
     /**
      * Waiter delivers the order.
      */

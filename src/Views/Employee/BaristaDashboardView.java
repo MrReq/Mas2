@@ -2,10 +2,7 @@ package Views.Employee;
 
 import Models.Barista;
 import Views.Loging.*;
-import Views.Panels.Barista.BaristaMenuPanel;
-import Views.Panels.Barista.BaristaOrdersPanel;
-import Views.Panels.Barista.BaristaPrepareCoffeePanel;
-import Views.Panels.Barista.BaristaStatisticsPanel;
+import Views.Panels.Barista.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +10,8 @@ import java.awt.*;
 public class BaristaDashboardView extends JFrame {
     private BaristaOrdersPanel ordersPanel;
     private BaristaPrepareCoffeePanel prepareCoffeePanel;
+    private BaristaAcceptedOrdersPanel acceptedOrdersPanel;
+    private BaristaFinishedOrdersPanel finishedOrdersPanel;
 
     private final Barista loggedBarista;
 
@@ -30,6 +29,8 @@ public class BaristaDashboardView extends JFrame {
 
         ordersPanel = new BaristaOrdersPanel(loggedBarista, this);
         prepareCoffeePanel = new BaristaPrepareCoffeePanel(loggedBarista);
+        acceptedOrdersPanel = new BaristaAcceptedOrdersPanel(loggedBarista);
+        finishedOrdersPanel = new BaristaFinishedOrdersPanel(loggedBarista);
 
 
     }
@@ -62,8 +63,18 @@ public class BaristaDashboardView extends JFrame {
         );
 
         tabbedPane.addTab(
-                "Prepare Coffee",
+                "Accepted",
+                acceptedOrdersPanel
+        );
+
+        tabbedPane.addTab(
+                "Preparing Coffee",
                 new BaristaPrepareCoffeePanel(loggedBarista)
+        );
+
+        tabbedPane.addTab(
+                "Finished Orders",
+                new BaristaFinishedOrdersPanel(loggedBarista)
         );
 
         tabbedPane.addTab(

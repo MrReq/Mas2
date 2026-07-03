@@ -1,6 +1,9 @@
 package Views.Panels.Barista;
 
+import Enums.OrderStatus;
 import Models.Barista;
+import Models.Order;
+import Models.Product;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -57,7 +60,7 @@ public class BaristaOrdersPanel extends JPanel {
                 ListSelectionModel.SINGLE_SELECTION
         );
 
-        refreshButton = new JButton("Refresh");
+        refreshButton = new JButton("Refresh back to the start");
 
         prepareButton = new JButton("Prepare Order");
 
@@ -74,7 +77,7 @@ public class BaristaOrdersPanel extends JPanel {
         setLayout(new BorderLayout());
 
         JLabel title = new JLabel(
-                "Orders Waiting For Preparation",
+                "NEW Orders Waiting For Preparation  (BaristaOrdersPanel)",
                 SwingConstants.CENTER
         );
 
@@ -126,49 +129,45 @@ public class BaristaOrdersPanel extends JPanel {
 
         tableModel.setRowCount(0);
 
-        /*
-            Docelowo:
+        for (Order order : Order.getOrderExtent()) {
 
-            for(Order order : Order.getExtent())
+            if (order.getOrderStatus() != OrderStatus.NEW) {
+                continue;
+            }
 
-            if(order.getStatus()==WAITING)
-        */
+            StringBuilder products = new StringBuilder();
 
-        tableModel.addRow(new Object[]{
+            for (Product product : order.getProducts()) {
 
-                1,
+                if (products.length() > 0) {
+                    products.append(", ");
+                }
 
-                "Jan Kowalski",
+                products.append(product.getProductName());
 
-                "Latte x2",
+            }
 
-                "Waiting"
+            String clientName = "-";
 
-        });
+            if (order.getClient() != null) {
 
-        tableModel.addRow(new Object[]{
+                clientName =
+                        order.getClient().getPersonName()
+                                + " "
+                                + order.getClient().getPeronSurname();
 
-                2,
+            }
 
-                "Anna Nowak",
+            tableModel.addRow(new Object[]{
 
-                "Espresso",
+                    order.getOrderID(),
+                    clientName,
+                    products.toString(),
+                    order.getOrderStatus()
 
-                "Waiting"
+            });
 
-        });
-
-        tableModel.addRow(new Object[]{
-
-                3,
-
-                "Piotr Wiśniewski",
-
-                "Cappuccino",
-
-                "Preparing"
-
-        });
+        }
 
     }
 
@@ -216,37 +215,21 @@ public class BaristaOrdersPanel extends JPanel {
         int row = ordersTable.getSelectedRow();
 
         if(row == -1){
-
             JOptionPane.showMessageDialog(
-
                     this,
-
-                    "Please select an order."
-
+                    "Select order."
             );
-
             return;
-
         }
 
-        tableModel.setValueAt(
+        int orderId =
+                (Integer) tableModel.getValueAt(row,0);
 
-                "Ready",
+        Order order = Order.findById(orderId);
 
-                row,
+        loggedBarista.startPreparing(order);
 
-                3
-
-        );
-
-        JOptionPane.showMessageDialog(
-
-                this,
-
-                "Order is ready to be served."
-
-        );
-
+        refreshTable();
     }
 
 }

@@ -1,6 +1,9 @@
 package Views.Panels.Barista;
 
+import Enums.OrderStatus;
 import Models.Barista;
+import Models.Order;
+import Models.Product;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -128,60 +131,51 @@ public class BaristaPrepareCoffeePanel extends JPanel {
 
         tableModel.setRowCount(0);
 
-        /*
-         Docelowo:
+        for (Order order : Order.getOrderExtent()) {
 
-         for(Order order : Order.getExtent()) {
+            if (order.getOrderStatus() == OrderStatus.PREPARING) {
 
-             if(order.getStatus()==WAITING_FOR_PREPARATION){
+                String products = "";
 
-                 ...
-             }
+                for (Product product : order.getProducts()) {
 
-         }
-        */
+                    if (!products.isEmpty()) {
+                        products += ", ";
+                    }
 
-        tableModel.addRow(new Object[]{
+                    products += product.getProductName();
 
-                1,
+                }
 
-                "Cappuccino",
+                String temperature = "-";
 
-                2,
+                if (!order.getProducts().isEmpty()) {
 
-                "Hot",
+                    Product firstProduct = order.getProducts().get(0);
 
-                "Waiting"
+                    if (firstProduct.getTemperatureOfTheService() != null) {
 
-        });
+                        temperature = firstProduct
+                                .getTemperatureOfTheService()
+                                .toString();
 
-        tableModel.addRow(new Object[]{
+                    }
 
-                2,
+                }
 
-                "Espresso",
+                tableModel.addRow(new Object[]{
 
-                1,
+                        order.getOrderID(),
+                        products,
+                        order.getProducts().size(),
+                        temperature,
+                        order.getOrderStatus()
 
-                "Hot",
+                });
 
-                "Preparing"
+            }
 
-        });
-
-        tableModel.addRow(new Object[]{
-
-                3,
-
-                "Iced Latte",
-
-                1,
-
-                "Cold",
-
-                "Waiting"
-
-        });
+        }
 
     }
 
@@ -248,16 +242,9 @@ public class BaristaPrepareCoffeePanel extends JPanel {
             return;
 
         }
-
-        tableModel.setValueAt(
-
-                "Ready",
-
-                row,
-
-                4
-
-        );
+        int orderID = (Integer) tableModel.getValueAt(row, 0);
+        Order selectedOrder = Order.findById(orderID);
+        loggedBarista.markOrderAsReady(selectedOrder);
 
         JOptionPane.showMessageDialog(
 
@@ -266,7 +253,7 @@ public class BaristaPrepareCoffeePanel extends JPanel {
                 "Coffee is ready to serve."
 
         );
-
+        refreshTable();
     }
 
 }

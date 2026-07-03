@@ -101,7 +101,7 @@ public class Boss extends Person {
      */
     public double showIncome() {
 
-        return Order.getExtent()
+        return Order.getOrderExtent()
 
                 .stream()
 
@@ -116,7 +116,7 @@ public class Boss extends Person {
      */
     public List<Order> lookOrderHistory() {
 
-        return Order.getExtent();
+        return Order.getOrderExtent();
 
     }
 
@@ -143,7 +143,7 @@ public class Boss extends Person {
      */
     public int showNumberOfOrders() {
 
-        return Order.getExtent().size();
+        return Order.getOrderExtent().size();
 
     }
 
@@ -161,13 +161,13 @@ public class Boss extends Person {
      */
     public double showAverageOrderValue() {
 
-        if (Order.getExtent().isEmpty()) {
+        if (Order.getOrderExtent().isEmpty()) {
 
             return 0;
 
         }
 
-        return showIncome() / Order.getExtent().size();
+        return showIncome() / Order.getOrderExtent().size();
 
     }
 

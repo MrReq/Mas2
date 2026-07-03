@@ -167,8 +167,12 @@ public class Barista extends Employee {
         product.prepare();
     }
 
-    public void markOrderReady(Order order){
+    public void markOrderAsReady(Order order) {
+        if(order == null){
+            throw new IllegalArgumentException("Order cannot be null.");
+        }
         order.markAsReady();
     }
+
 
 }

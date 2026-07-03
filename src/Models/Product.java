@@ -2,6 +2,7 @@ package Models;
 
 import Enums.TemperatureOfTheService;
 import Interfaces.Preparable;
+import SecondaryClasses.ObjectPlus;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Product implements Preparable {
+public abstract class Product extends ObjectPlus implements Preparable {
     //EXTENT SESSION
     /**
      * Extent session contains:

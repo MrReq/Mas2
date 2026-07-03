@@ -2,27 +2,25 @@ package Models;
 
 import Enums.OrderStatus;
 import Enums.OrderType;
+import SecondaryClasses.ObjectPlus;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-public class Order {
+public class Order extends ObjectPlus{
     //=========================================================
     // EXTENT
     //=========================================================
-    private static final List<Order> extent = new ArrayList<>();
-    private static void addOrder(Order order) {
-        extent.add(order);
-    }
-    private static void removeOrder(Order order) {
-        extent.remove(order);
-    }
-    public static List<Order> getExtent() {
-        return Collections.unmodifiableList(extent);
+    @SuppressWarnings("unchecked")
+    public static List<Order> getOrderExtent() {
+        return (List<Order>)(List<?>) ObjectPlus.getExtent(Order.class);
     }
     public static void showExtent() {
-        System.out.println("Extent of " + Order.class.getSimpleName());
-        extent.forEach(System.out::println);
+        System.out.println("===== ORDER EXTENT =====");
+        for (Order order : getOrderExtent()) {
+            System.out.println(order);
+        }
     }
     //=========================================================
     // FIELDS
@@ -30,7 +28,7 @@ public class Order {
     private static int counter = 1;
     private final int orderID;
     private final OrderType orderType;
-    private OrderStatus status;
+    private OrderStatus orderStatus;
     private final LocalDateTime createdAt;
     //=========================================================
     // ASSOCIATIONS
@@ -51,9 +49,8 @@ public class Order {
         this.orderID = counter++;
         this.client = client;
         this.orderType = orderType;
-        this.status = OrderStatus.NEW;
+        this.orderStatus = OrderStatus.NEW;
         this.createdAt = LocalDateTime.now();
-        addOrder(this);
         if (client != null) {
             client.addOrder(this);
         }
@@ -171,7 +168,7 @@ public class Order {
         return orderType;
     }
     public OrderStatus getOrderStatus() {
-        return status;
+        return orderStatus;
     }
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -179,66 +176,53 @@ public class Order {
     //=========================================================
     // BUSINESS METHODS
     //=========================================================
-    /**
-     * Returns current order status.
-     */
-    public OrderStatus checkOrderStatus() {
-        return status;
-    }
+
     /**
      * Boss/Barista accepts order.
      */
     public void acceptOrder() {
-        if (status != OrderStatus.NEW) {
+        if (orderStatus != OrderStatus.NEW) {
             throw new IllegalStateException(
                     "Only NEW orders can be accepted."
             );
         }
-        status = OrderStatus.ACCEPTED;
+        orderStatus = OrderStatus.ACCEPTED;
     }
     /**
      * Barista starts preparing the order.
      */
     public void startPreparation() {
-        if (status != OrderStatus.ACCEPTED) {
-            throw new IllegalStateException(
-                    "Order must be ACCEPTED first."
-            );
-        }
-        status = OrderStatus.PREPARING;
+        orderStatus = OrderStatus.PREPARING;
     }
     /**
      * Barista finished preparing.
      */
-    public void markAsReady() {
-        if (status != OrderStatus.PREPARING) {
-            throw new IllegalStateException(
-                    "Order is not being prepared."
-            );
-        }
-        status = OrderStatus.READY;
+    public void markAsReady(){
+
+        orderStatus = OrderStatus.READY;
+
     }
     /**
      * Waiter delivers the order.
      */
     public void deliver() {
-        if (status != OrderStatus.READY) {
+        if (orderStatus != OrderStatus.READY) {
             throw new IllegalStateException(
                     "Order is not READY."
             );
         }
-        status = OrderStatus.DELIVERED;
+        orderStatus = OrderStatus.DELIVERED;
     }
     /**
      * Cancel order.
      */
     public void cancelOrder() {
-        if (status == OrderStatus.DELIVERED) {
+        if (orderStatus == OrderStatus.DELIVERED) {
             throw new IllegalStateException(
                     "Delivered order cannot be cancelled."
             );
         }
-        status = OrderStatus.CANCELLED;
+        orderStatus = OrderStatus.CANCELLED;
     }
     /**
      * Generic status update.
@@ -249,44 +233,44 @@ public class Order {
                     "Status cannot be null."
             );
         }
-        this.status = status;
+        this.orderStatus = status;
     }
     /**
      * Returns true if order is completed.
      */
     public boolean isCompleted() {
-        return status == OrderStatus.DELIVERED;
+        return orderStatus == OrderStatus.DELIVERED;
     }
     /**
      * Returns true if order has been cancelled.
      */
     public boolean isCancelled() {
-        return status == OrderStatus.CANCELLED;
+        return orderStatus == OrderStatus.CANCELLED;
     }
     /**
      * Returns true if order is currently being prepared.
      */
     public boolean isPreparing() {
-        return status == OrderStatus.PREPARING;
+        return orderStatus == OrderStatus.PREPARING;
     }
     /**
      * Returns true if order is ready.
      */
     public boolean isReady() {
-        return status == OrderStatus.READY;
+        return orderStatus == OrderStatus.READY;
     }
     /**
      * Returns true if order has been accepted.
      */
     public boolean isAccepted() {
-        return status == OrderStatus.ACCEPTED;
+        return orderStatus == OrderStatus.ACCEPTED;
     }
     /**
      * Returns true if order is new.
      */
     public boolean isNew() {
 
-        return status == OrderStatus.NEW;
+        return orderStatus == OrderStatus.NEW;
 
     }
 
@@ -296,7 +280,7 @@ public class Order {
      * Returns all active orders.
      */
     public static List<Order> getActiveOrders() {
-        return extent.stream()
+        return getOrderExtent().stream()
                 .filter(order -> !order.isCompleted())
                 .filter(order -> !order.isCancelled())
                 .toList();
@@ -306,7 +290,7 @@ public class Order {
      * Returns all completed orders.
      */
     public static List<Order> getCompletedOrders() {
-        return extent.stream()
+        return getOrderExtent().stream()
                 .filter(Order::isCompleted)
                 .toList();
     }
@@ -315,7 +299,7 @@ public class Order {
      * Returns total income.
      */
     public static double calculateTotalIncome() {
-        return extent.stream()
+        return getOrderExtent().stream()
                 .mapToDouble(Order::countOrderValue)
                 .sum();
     }
@@ -324,6 +308,20 @@ public class Order {
      */
     public int getNumberOfProducts() {
         return products.size();
+    }
+
+    public static Order findById(int orderID) {
+        System.out.println("Searching for order ID = " + orderID);
+        System.out.println("Orders in extent: " + getOrderExtent().size());
+        for (Order order : getOrderExtent()) {
+            System.out.println("Found order: " + order.getOrderID());
+            if (order.getOrderID() == orderID) {
+                System.out.println("MATCH!");
+                return order;
+            }
+        }
+        System.out.println("NOT FOUND");
+        return null;
     }
 
     @Override
@@ -341,7 +339,7 @@ public class Order {
                 """,
                 orderID,
                 orderType,
-                status,
+                orderStatus,
                 client == null
                         ? "No client"
                         : client.getPersonName()

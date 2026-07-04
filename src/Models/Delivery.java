@@ -19,6 +19,13 @@ public class Delivery extends ObjectPlus {
     }
     private static int counter = 1;
     int deliveryID;
+    //do kompozycji
+    private String nameOdDelivery;
+
+    private Delivery(Order order , String nameOdDelivery){
+        this.order = order;
+        
+    }
     private Order order;
     private Delivery(Order order) {
         if (order == null) {

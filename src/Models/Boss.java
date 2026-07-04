@@ -4,11 +4,13 @@ import SecondaryClasses.ObjectPlus;
 import javax.swing.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 public class Boss extends Person {
     private static final long serialVersionUID = 1L;
     // FIELDS
     private String password;
+    private final List<Employment> employments = new ArrayList<>();
 
     public static LocalTime start = LocalTime.of(8,0);
     public static LocalTime end = LocalTime.of(20,0);
@@ -66,17 +68,12 @@ public class Boss extends Person {
      * Use Case: Manage Employees
      */
     public static void manageEmployees() {
-
         Employee theBestEmployee = null;
         float maxSalary = 0;
-
         for (Employee employee : Employee.getEmployeeExtent()) {
-
             if (employee.getEmployeeSalary() > maxSalary) {
-
                 maxSalary = employee.getEmployeeSalary();
                 theBestEmployee = employee;
-
             }
         }
 

@@ -15,6 +15,7 @@ public class Client extends Person {
     private boolean hasClubCard;
     private int satisfactionOfTheService;
     private Citizenship citizenship;
+    private Address address;
     private final Map<Integer, Order> orders =
             new TreeMap<>();
 
@@ -29,13 +30,22 @@ public class Client extends Person {
                   LocalDate dateOfBirth,
                   Sex sex,
                   boolean hasClubCard) {
-
         super(name, surname, dateOfBirth, sex);
-
         this.clientID = Person.getCounter();
-
         this.hasClubCard = hasClubCard;
         shoppingCart = Order.createOrder(this, OrderType.Liquid);
+    }
+    public Client(String name,
+                  String surname,
+                  LocalDate birthDate,
+                  Sex sex,
+                  Address address,
+                  boolean hasClubCard,
+                  Citizenship citizenship) {
+        super(name, surname, birthDate, sex);
+        this.address = address;
+        this.hasClubCard = hasClubCard;
+        this.citizenship = citizenship;
     }
 
     public Client(String name,
@@ -95,6 +105,9 @@ public class Client extends Person {
         return hasClubCard;
     }
 
+    public Address getAddress() {
+        return address;
+    }
 
     public Optional<Citizenship> getCitizenship() {
         return Optional.ofNullable(citizenship);
@@ -117,6 +130,11 @@ public class Client extends Person {
         waiter.setGrade(satisfaction);
     }
     // ====================SETTERS=================
+
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public void setSatisfactionOfTheService(int satisfaction) {
         if (satisfaction < 1 || satisfaction > 5) {

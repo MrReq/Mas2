@@ -26,7 +26,7 @@ public class WaiterOrdersPanel extends JPanel {
     // COMPONENTS
     private void initializeComponents() {
         tableModel = new DefaultTableModel();
-        tableModel.setColumnIdentifiers(new String[]{"Order ID", "Client", "Table", "Status", "Value"});
+        tableModel.setColumnIdentifiers(new String[]{"Order ID", "Client", "Status", "Value"});
         ordersTable = new JTable(tableModel);
         ordersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         refreshButton = new JButton("Refresh");
@@ -65,7 +65,6 @@ public class WaiterOrdersPanel extends JPanel {
             tableModel.addRow(new Object[]{
                     order.getOrderID(),
                     client,
-                    order.getTableNumber(),
                     order.getOrderStatus(),
                     order.countOrderValue()
             });

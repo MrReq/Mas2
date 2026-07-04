@@ -12,12 +12,15 @@ public class ClientProfileView extends JPanel {
     private JLabel ordersLabel;
     private JButton refreshButton;
     private JButton editButton;
+    private JLabel addressLabel;
+    private JLabel addressValueLabel;
     public ClientProfileView(Client loggedClient) {
         this.loggedClient = loggedClient;
         initializeComponents();
         initializeLayout();
         initializeListeners();
         refreshData();
+
     }
     // COMPONENTS
     private void initializeComponents() {
@@ -27,8 +30,10 @@ public class ClientProfileView extends JPanel {
         sexLabel = new JLabel();
         clubCardLabel = new JLabel();
         ordersLabel = new JLabel();
+        addressValueLabel = new JLabel("-");
         refreshButton = new JButton("Refresh");
         editButton = new JButton("Edit profile");
+
     }
     // LAYOUT
     private void initializeLayout() {
@@ -39,7 +44,7 @@ public class ClientProfileView extends JPanel {
         );
         title.setFont(new Font("Arial", Font.BOLD, 24));
         add(title, BorderLayout.NORTH);
-        JPanel center = new JPanel(new GridLayout(6, 2, 10, 10));
+        JPanel center = new JPanel(new GridLayout(7,2,10,10));
         center.setBorder(BorderFactory.createEmptyBorder(30, 100, 30, 100));
         center.add(new JLabel("Name:"));
         center.add(nameLabel);
@@ -53,6 +58,8 @@ public class ClientProfileView extends JPanel {
         center.add(clubCardLabel);
         center.add(new JLabel("Orders:"));
         center.add(ordersLabel);
+        center.add(new JLabel("Address:"));
+        center.add(addressValueLabel);
         add(center, BorderLayout.CENTER);
         JPanel south = new JPanel();
         south.add(refreshButton);
@@ -73,6 +80,14 @@ public class ClientProfileView extends JPanel {
         sexLabel.setText(loggedClient.getPersonSex().toString());
         clubCardLabel.setText(loggedClient.hasClubCard() ? "Yes" : "No");
         ordersLabel.setText(String.valueOf(loggedClient.countOrders()));
+        if (loggedClient.getAddress() == null)
+            addressValueLabel.setText("-");
+        else {
+            addressValueLabel.setText("<html>" + loggedClient.getAddress().getStreet() + "<br>"
+                    + loggedClient.getAddress().getPostalCode() + " " + loggedClient.getAddress().getCity()
+                    + "<br>" + loggedClient.getAddress().getCountry() + "</html>"
+            );
+        }
     }
 
     public void reload(){

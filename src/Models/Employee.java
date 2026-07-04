@@ -220,13 +220,13 @@ public class Employee extends Person {
     }
     /**ASSOCIATION WITH ATTRIBUTE
      */
-    private List<Employment_CoffeeHouse_Employee> employments = new ArrayList<>();
-    public void addEmployment(Employment_CoffeeHouse_Employee employment) {
+    private List<Employment> employments = new ArrayList<>();
+    public void addEmployment(Employment employment) {
         if (!employments.contains(employment)) {
             employments.add(employment);
         }
     }
-    public List<Employment_CoffeeHouse_Employee> getEmployments() {
+    public List<Employment> getEmployments() {
         return employments;
     }
     public Employee getRecommendedBy(){

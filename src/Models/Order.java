@@ -33,7 +33,7 @@ public class Order extends ObjectPlus{
     private static int counter = 1;
     private final int orderID;
     private Preparation preparation;
-    private int tableNumber;
+    private float totalPrice;
     private final OrderType orderType;
     private OrderStatus orderStatus;
     private final LocalDateTime createdAt;
@@ -72,25 +72,29 @@ public class Order extends ObjectPlus{
         return new Order(client, type);
     }
 
-
-
     //=========================================================
     // PRODUCTS
     //=========================================================
     public void addProduct(Product product) {
-
         if (product == null) {
             throw new IllegalArgumentException();
         }
-
         products.add(product);
     }
+
+    public void addProduct(Product... products) {
+        for (Product product : products) {
+            addProduct(product);
+        }
+    }
+
     public void removeProduct(Product product) {
         if (product == null) {
             return;
         }
         products.remove(product);
     }
+
     public void clearProducts() {
         products.clear();
     }
@@ -111,7 +115,13 @@ public class Order extends ObjectPlus{
                 .mapToDouble(Product::getProductCost)
                 .sum();
     }
+
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     public float getTotalPrice() {
+        setTotalPrice((float) countOrderValue());
         return (float) countOrderValue();
     }
     //=========================================================
@@ -379,9 +389,5 @@ public class Order extends ObjectPlus{
             }
         }
         return result;
-    }
-
-    public int getTableNumber() {
-        return tableNumber;
     }
 }

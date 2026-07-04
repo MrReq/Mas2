@@ -2,9 +2,6 @@ package Models;
 
 import SecondaryClasses.ObjectPlus;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -81,8 +78,8 @@ public class CoffeeHouse extends ObjectPlus {
             employee.addCoffeeHouse(this);
         }
     }
-    private List<Employment_CoffeeHouse_Employee> employments = new ArrayList<>();
-    public void addEmployment(Employment_CoffeeHouse_Employee employment) {
+    private List<Employment> employments = new ArrayList<>();
+    public void addEmployment(Employment employment) {
         if (!employments.contains(employment)) {
             employments.add(employment);
         }

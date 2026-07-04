@@ -17,6 +17,9 @@ public class BossProductsPanel extends JPanel {
     private JButton manageButton;
     private JButton showIncomeButton;
     private JButton lookOrderHistoryButton;
+
+    private JButton showNumberOfOrders;
+    private JButton showNumberOfProducts;
     // CONSTRUCTOR
     public BossProductsPanel(Boss loggedBoss) {
         this.loggedBoss = loggedBoss;
@@ -38,6 +41,8 @@ public class BossProductsPanel extends JPanel {
         manageButton = new JButton("Manage Product");
         showIncomeButton = new JButton("Show Income");
         lookOrderHistoryButton = new JButton("Look Order History");
+        showNumberOfOrders = new JButton("Show Number of Orders");
+        showNumberOfProducts = new JButton("Show Number of Products");
     }
     // LAYOUT
     private void initializeLayout() {
@@ -54,6 +59,8 @@ public class BossProductsPanel extends JPanel {
         bottomPanel.add(manageButton);
         bottomPanel.add(showIncomeButton);
         bottomPanel.add(lookOrderHistoryButton);
+        bottomPanel.add(showNumberOfOrders);
+        bottomPanel.add(showNumberOfProducts);
         add(bottomPanel, BorderLayout.SOUTH);
     }
     // LISTENERS
@@ -65,6 +72,10 @@ public class BossProductsPanel extends JPanel {
         manageButton.addActionListener(e -> Boss.manageProducts());
         showIncomeButton.addActionListener(e -> Boss.showIncome());
         lookOrderHistoryButton.addActionListener(e -> Boss.lookOrderHistory());
+        showNumberOfOrders.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Number of Orders:\n\n" + loggedBoss.showNumberOfOrders());});
+        showNumberOfProducts.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Number of Products:\n\n" + loggedBoss.showNumberOfProducts());});
     }
     // TABLE
     private void refreshTable() {

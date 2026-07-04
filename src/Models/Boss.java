@@ -182,7 +182,7 @@ public class Boss extends Person {
      * Dashboard statistics.
      */
     public int showNumberOfEmployees() {
-        return Employee.getExtent().size();
+        return Employee.getEmployeeExtent().size();
     }
 
     /**
@@ -216,5 +216,32 @@ public class Boss extends Person {
     @Override
     public String toString() {
         return "Boss{" + "name='" + personName + '\'' + ", surname='" + peronSurname + '\'' + '}';
+    }
+
+    public HighExperienced promote(Employee employee) {
+        HighExperienced promoted =
+                new HighExperienced(
+                        employee,
+                        "BMW"
+                );
+        employee.removeEmployee();
+        return promoted;
+    }
+    public List<Employee> evaluateEmployees() {
+
+        List<Employee> promotedEmployees = new ArrayList<>();
+
+        for (Employee employee : Employee.getEmployeeExtent()) {
+
+            if (employee instanceof Barista barista &&
+                    barista.countReadyOrders() >= 5) {
+
+                promote(employee);
+
+                promotedEmployees.add(employee);
+            }
+        }
+
+        return promotedEmployees;
     }
 }

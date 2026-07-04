@@ -1,10 +1,12 @@
 package Views.Loging;
 import Enums.Sex;
+import Models.Boss;
 import Models.Client;
 import Views.Klient.ClientDashboardView;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 public class ClientLoginView extends JFrame {
@@ -96,11 +98,13 @@ public class ClientLoginView extends JFrame {
         String firstName = firstNameField.getText().trim();
         String lastName = lastNameField.getText().trim();
         Date date = (Date) birthDateSpinner.getValue();
-        LocalDate birthDate =
-                date.toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
+        LocalDate birthDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         Sex sex = (Sex) sexComboBox.getSelectedItem();
+        LocalTime now = LocalTime.now();
+        if (now.isBefore(Boss.start) || now.isAfter(Boss.end)) {
+            JOptionPane.showMessageDialog(this, "Employees can log in only between 08:00 and 20:00.", "Login denied", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         boolean hasClubCard = clubCardCheckBox.isSelected();
         for (Client client : Client.getClientExtent()) {
             if (client.getPersonName().equalsIgnoreCase(firstName)

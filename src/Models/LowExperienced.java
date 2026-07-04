@@ -1,64 +1,57 @@
 package Models;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import Enums.Sex;
-import Enums.TypeOfMeal;
-import Enums.TypeOfMilk;
+import SecondaryClasses.ObjectPlus;
+import java.time.LocalDate;
+import java.util.List;
 public class LowExperienced extends Employee {
     private static final long serialVersionUID = 1L;
-    //EXTENT SESSION
-    /** Extent session contains:
-     * <br>to String method</br>
-     * <br>{@linkplain List} in implementation as {@linkplain ArrayList} called extent that holds all instances</br>
-     * <br>Private Static method "addLowExperienced" which adds instance of {@linkplain LowExperienced} to extent collection</br>
-     * <br>Private Static method "removeLowExperienced" which removes instance of {@linkplain LowExperienced} from extent collection</br>
-     * <br>Public Static method "showExtent" which displays all instances of {@linkplain LowExperienced} line by line.</br>
-     */
-    @Override
-    public String toString() {
-        return "LowExperienced: " + personName + ", id: " + super.toString();
-    }
-    private static List<LowExperienced> extent = new ArrayList<>();
-    private static void addLowExperienced(LowExperienced lowExperienced) {
-        extent.add(lowExperienced);
-    }
-    private static void removeLowExperienced(LowExperienced lowExperienced) {
-        extent.remove(lowExperienced);
+    // EXTENT
+    @SuppressWarnings("unchecked")
+    public static List<LowExperienced> getLowExperiencedExtent() {
+        return (List<LowExperienced>) (List<?>) ObjectPlus.getExtent(LowExperienced.class);
     }
     public static void showExtent() {
-        System.out.println("Extent of the class: " + LowExperienced.class.getName());
-        for (LowExperienced lowExperienced : extent) {
-            System.out.println(lowExperienced);
+        System.out.println("===== LOW EXPERIENCED EXTENT =====");
+        for (LowExperienced employee : getLowExperiencedExtent()) {
+            System.out.println(employee);
         }
     }
-    //EXTENT SESSION END
-    //FIELDS SESSION START
-    /**Complex, Single, Required, Object, Concrete Attribute "favouriteCoffee" typed {@linkplain TypeOfMilk}
+    // FIELDS
+    /**
+     * Maximum bonus that can be granted to a low experienced employee.
      */
-    float maxBonusValue;
-    //FIELDS SESSION END
-    //CONSTRUCTORS, GETTERS, SETTERS SESSION START
-    public LowExperienced(String name, String surname, LocalDate dateOfBirth, Sex sex, Float salary, float maxBonusValue) {
-        super(name, surname, dateOfBirth, sex, salary);
+    private float maxBonusValue;
+    // CONSTRUCTORS
+    public LowExperienced(String name, String surname, LocalDate birthDate, Sex sex, float salary, float maxBonusValue) {
+        super(name, surname, birthDate, sex, salary);
         this.maxBonusValue = maxBonusValue;
     }
-    //DYNAMIC INHERITANCE START
+
+    /**
+     * Dynamic inheritance.
+     * Creates LowExperienced based on existing Employee.
+     */
     public LowExperienced(Employee employee, float maxBonusValue) {
-        super(employee.personName, employee.peronSurname, employee.personDateOfBirth, employee.personSex, employee.employeeSalary);
+        super(employee.getPersonName(), employee.getPeronSurname(), employee.getPersonDateOfBirth(), employee.getPersonSex(),
+                employee.getEmployeeSalary());
         this.maxBonusValue = maxBonusValue;
     }
-    public String getPrivileges() {
-        return "Maximum bonus: "
-                + maxBonusValue;
-    }
-    //DYNAMIC INHERITANCE START
+    // GETTERS / SETTERS
+
     public float getMaxBonusValue() {
         return maxBonusValue;
     }
-    //CONSTRUCTORS, GETTERS, SETTERS SESSION START
-    //METHODS SESSION START
-    //METHODS SESSION END
+    public void setMaxBonusValue(float maxBonusValue) {
+        this.maxBonusValue = maxBonusValue;
+    }
+    @Override
+    public String getPrivileges() {
+        return "Maximum bonus: " + maxBonusValue;
+    }
+    // TO STRING
+    @Override
+    public String toString() {
+        return super.toString() +
+                ", Maximum bonus: " + maxBonusValue;
+    }
 }

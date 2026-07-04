@@ -184,32 +184,43 @@ method addProduct(Product... product)
 Client can make a lot of orders. But every order belongs to one concrete client.
 There is reverse connection. In Client we have client.addOrder(Order order) and in Order we have order.setClient(Client client)
 
-12.
-✔ Inheritance
+12.Association with attribute
+An Example of this association is 
 
-✔ Abstract classes
+13.Qualified Association
+I tried but I failed
 
-✔ Interfaces
+14.Composition
+I tried but I failed.
 
-✔ Composition
+15.Disjoint
+Most of the inheritance are disjoint. 
+For example Employees, they can not share duties with others.
 
-✔ Association
+16.Abstract Class:
+There are two different which are abstract Person and Coffee
 
-✔ Association Class
+17.Polymorphism:
+Polymorphic method is from coffee objects. CountPowerOfCoffee()
 
+18:Multiple Inheritance:
+-
 
+19:Multi-faceted inheritance
+There are two types of inheritance from Employee depends on duties (Cleaner, Waiter,Barista)
+and depends on internship (LowExperienced and HighExperienced)
 
-✔ Enumerations
+20.Dynamic Inheritance:
+there is a possibility that Employee can become HighExperienced
 
-✔ Business methods
+21.Enumerations
+There are a lot of Enums: AllPersonTypes, Citizenship, CoffeeCountry, Doneness, LanguageSkill, Level,
+OrderStatus,OrderType,SatisfactionOfTheService, Sex, Shift,Size,TemperatureOfTheService,TypeOfMeal,TypeOfMilk
 
-✔ Static factory methods
+22 Validation Methods:
+All except Boss can log in between 8 - 20
+Employee can be promoted only if done at least 6 order.
 
-
-
-✔ Validation
-
-✔ Swing GUI
 
 ============================================================
 Thank you!

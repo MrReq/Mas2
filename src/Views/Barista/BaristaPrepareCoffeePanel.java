@@ -1,9 +1,7 @@
 package Views.Barista;
 import Enums.OrderStatus;
-import Models.Barista;
-import Models.Order;
-import Models.Preparation;
-import Models.Product;
+import Models.*;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -14,6 +12,7 @@ public class BaristaPrepareCoffeePanel extends JPanel {
     private JButton refreshButton;
 //    private JButton startPreparationButton;
     private JButton finishPreparationButton;
+    private JButton countPowerOfCoffeeButton;
     private BaristaDashboardView parent;
     private Preparation preparation;
     public BaristaPrepareCoffeePanel(Barista loggedBarista, BaristaDashboardView parent) {
@@ -46,6 +45,7 @@ public class BaristaPrepareCoffeePanel extends JPanel {
         bottomPanel.add(refreshButton);
 //        bottomPanel.add(startPreparationButton);
         bottomPanel.add(finishPreparationButton);
+        bottomPanel.add(countPowerOfCoffeeButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
     // LISTENERS
@@ -53,6 +53,7 @@ public class BaristaPrepareCoffeePanel extends JPanel {
         refreshButton.addActionListener(e -> refreshTable());
 //        startPreparationButton.addActionListener(e -> startPreparation());
         finishPreparationButton.addActionListener(e -> finishPreparation());
+        countPowerOfCoffeeButton.addActionListener(e -> finishPreparation());
     }
     // TABLE
     private void refreshTable() {
@@ -119,5 +120,16 @@ public class BaristaPrepareCoffeePanel extends JPanel {
         JOptionPane.showMessageDialog(this, "Coffee is ready to serve.");
         parent.refreshAllPanels();
     }
+
+//    public void setCountPowerOfCoffeeButton(){
+//        int row = coffeeTable.getSelectedRow();
+//        if(row == -1){
+//            JOptionPane.showMessageDialog(this, "Please select coffee.");
+//            return;
+//        }
+//        int orderID = (Integer) tableModel.getValueAt(row, 0);
+//        Order selectedOrder = Order.findById(orderID);
+//        Coffee coffee = (Coffee) selectedOrder.getProducts().getFirst();
+//    }
     public void reload() {refreshTable();}
 }

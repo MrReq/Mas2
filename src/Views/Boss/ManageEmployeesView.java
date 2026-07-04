@@ -3,10 +3,11 @@ import Models.Barista;
 import Models.Boss;
 import Models.Employee;
 import Models.Employment;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
 public class ManageEmployeesView extends JPanel {
     // FIELDS
     private final Boss loggedBoss;
@@ -18,6 +19,10 @@ public class ManageEmployeesView extends JPanel {
     private JButton refreshButton;
     private JButton manageEmployeesButton;
     private JButton EmploymentsButton;
+    private JButton PromoteEmployeeButton;
+    private JButton showNumberOfEmployees;
+    private JButton showNumberOfClients;
+
     // CONSTRUCTOR
     public ManageEmployeesView(Boss loggedBoss) {
         this.loggedBoss = loggedBoss;
@@ -44,6 +49,10 @@ public class ManageEmployeesView extends JPanel {
         refreshButton = new JButton("Refresh");
         manageEmployeesButton = new JButton("Manage Employees");
         EmploymentsButton = new JButton("Show All Emplyments");
+        PromoteEmployeeButton = new JButton("Show all promoted employees");
+        showNumberOfEmployees = new JButton("Show Number of Employees");
+        showNumberOfClients = new JButton("Show Number of Clients");
+
     }
     // LAYOUT
     private void initializeLayout() {
@@ -59,6 +68,10 @@ public class ManageEmployeesView extends JPanel {
         buttons.add(refreshButton);
         buttons.add(manageEmployeesButton);
         buttons.add(EmploymentsButton);
+        buttons.add(PromoteEmployeeButton);
+        buttons.add(showNumberOfEmployees);
+        buttons.add(showNumberOfClients);
+
         add(buttons, BorderLayout.SOUTH);
     }
     // LISTENERS
@@ -69,6 +82,12 @@ public class ManageEmployeesView extends JPanel {
         removeButton.addActionListener(e -> removeEmployee());
         manageEmployeesButton.addActionListener(e -> Boss.manageEmployees());
         EmploymentsButton.addActionListener(e -> Employment.showEmployments());
+        PromoteEmployeeButton.addActionListener(e -> showPromotedEmployees());
+        showNumberOfEmployees.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Number of Employees:\n\n" + loggedBoss.showNumberOfEmployees());});
+        showNumberOfClients.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Number of Clients:\n\n" + loggedBoss.showNumberOfClients());});
+
     }
     // TABLE
     public void refreshTable() {
@@ -123,5 +142,41 @@ public class ManageEmployeesView extends JPanel {
         employee.removeEmployee();
         refreshTable();
         JOptionPane.showMessageDialog(this, "Employee removed.");
+    }
+
+    public void showPromotedEmployees(){
+        List<Employee> promoted = loggedBoss.evaluateEmployees();
+
+        if (promoted.isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No employee met the promotion requirements.",
+                    "Promotion",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("The following employees have been promoted:\n\n");
+
+        for (Employee employee : promoted) {
+
+            sb.append("• ")
+                    .append(employee.getPersonName())
+                    .append(" ")
+                    .append(employee.getPeronSurname())
+                    .append("\n");
+        }
+
+        JOptionPane.showMessageDialog(
+                this,
+                sb.toString(),
+                "Promotion completed",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 }

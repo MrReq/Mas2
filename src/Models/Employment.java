@@ -7,91 +7,61 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-
 public class Employment extends ObjectPlus implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
-    //=========================================================
     // FIELDS
-    //=========================================================
-
     private final Boss boss;
-
     private final Employee employee;
-
     /**
      * Date of employment.
      */
     private final LocalDate employmentDate;
-
     /**
      * Null means that employee is still employed.
      */
     private LocalDate dismissalDate;
-
-    //=========================================================
     // EXTENT
-    //=========================================================
-
     @SuppressWarnings("unchecked")
     public static List<Employment> getEmploymentExtent() {
         return (List<Employment>) (List<?>) ObjectPlus.getExtent(Employment.class);
     }
 
-    //=========================================================
     // CONSTRUCTOR
-    //=========================================================
-
-    public Employment(Boss boss,
-                      Employee employee,
-                      LocalDate employmentDate) {
-
+    public Employment(Boss boss, Employee employee, LocalDate employmentDate) {
         if (boss == null)
             throw new IllegalArgumentException("Boss cannot be null.");
-
         if (employee == null)
             throw new IllegalArgumentException("Employee cannot be null.");
-
         if (employmentDate == null)
             throw new IllegalArgumentException("Employment date cannot be null.");
-
         this.boss = boss;
         this.employee = employee;
         this.employmentDate = employmentDate;
-
         boss.addEmployment(this);
         employee.addEmployment(this);
     }
 
-    //=========================================================
     // BUSINESS METHODS
-    //=========================================================
-
     /**
      * Ends employment.
      */
     public void dismiss() {
-
         if (dismissalDate != null) {
             throw new IllegalStateException("Employee has already been dismissed.");
         }
-
         dismissalDate = LocalDate.now();
     }
-
     /**
      * Returns true if employee still works.
      */
     public boolean isActive() {
         return dismissalDate == null;
     }
-
     /**
      * Returns employment duration.
      */
     public Period getEmploymentPeriod() {
-
         LocalDate endDate =
                 dismissalDate == null
                         ? LocalDate.now()

@@ -31,10 +31,8 @@ public class AddEmployeeView extends JFrame {
     private JButton cancelButton;
 
     public AddEmployeeView(ManageEmployeesView parent, Boss loggedBoss) {
-
         this.parent = parent;
         this.loggedBoss = loggedBoss;
-
         initializeFrame();
         initializeComponents();
         initializeLayout();

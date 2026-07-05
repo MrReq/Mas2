@@ -185,7 +185,9 @@ public class Employee extends Person {
         }
     }
     public Employment getCurrentEmployment() {
-        return getEmploymentExtent().stream()
+        return Employment.getEmploymentExtent()
+                .stream()
+                .filter(e -> e.getEmployee() == this)
                 .filter(Employment::isActive)
                 .findFirst()
                 .orElse(null);

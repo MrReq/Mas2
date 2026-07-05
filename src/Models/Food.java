@@ -6,6 +6,7 @@ import java.util.List;
 import Enums.Doneness;
 import Enums.TemperatureOfTheService;
 import Enums.TypeOfMeal;
+import SecondaryClasses.ObjectPlus;
 
 public class Food extends Product {
     private static final long serialVersionUID = 1L;
@@ -21,20 +22,11 @@ public class Food extends Product {
     public String toString() {
         return "Food: " + productName + " " + super.toString() +" "+ weight + " " + typeOfMeal + " " + doneness;
     }
-    private static List<Food> extent = new ArrayList<>();
-    private static void addFood(Food food) {
-        extent.add(food);
+
+    @SuppressWarnings("unchecked")
+    public static List<Food> getFoodExtent() {
+        return (List<Food>) (List<?>) ObjectPlus.getExtent(Food.class);
     }
-    private static void removeFood(Food food) {
-        extent.remove(food);
-    }
-    public static void showExtent() {
-        System.out.println("Extent of the class: " + Food.class.getName());
-        for (Food food : extent) {
-            System.out.println(food);
-        }
-    }
-    //EXTENT SESSION END
     //FIELDS SESSION START
     /**Simple, Single, Required, Object, Concrete Attribute "weight" typed {@linkplain Double}
      */

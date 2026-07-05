@@ -22,12 +22,7 @@ public class HighExperienced extends Employee {
      */
     private String companyCar;
     // CONSTRUCTORS
-    public HighExperienced(String name,
-                           String surname,
-                           LocalDate birthDate,
-                           Sex sex,
-                           float salary) {
-
+    public HighExperienced(String name, String surname, LocalDate birthDate, Sex sex, float salary) {
         super(name, surname, birthDate, sex, salary);
     }
     /**
@@ -36,11 +31,7 @@ public class HighExperienced extends Employee {
      */
     public HighExperienced(Employee employee,
                            String companyCar) {
-        super(
-                employee.getPersonName(),
-                employee.getPeronSurname(),
-                employee.getPersonDateOfBirth(),
-                employee.getPersonSex(),
+        super(employee.getPersonName(), employee.getPeronSurname(), employee.getPersonDateOfBirth(), employee.getPersonSex(),
                 employee.getEmployeeSalary()
         );
         this.companyCar = companyCar;

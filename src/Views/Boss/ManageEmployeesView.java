@@ -14,9 +14,9 @@ public class ManageEmployeesView extends JPanel {
     private final Boss loggedBoss;
     private JTable employeesTable;
     private DefaultTableModel tableModel;
-    private JButton addButton;
-    private JButton editButton;
-    private JButton removeButton;
+    private JButton addEmployeeButton;
+    private JButton editEmployeeButton;
+    private JButton removeEmployeeButton;
     private JButton refreshButton;
     private JButton manageEmployeesButton;
     private JButton EmploymentsButton;
@@ -46,9 +46,9 @@ public class ManageEmployeesView extends JPanel {
         employeesTable.setRowSorter(sorter);
         employeesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         employeesTable.getTableHeader().setReorderingAllowed(false);
-        addButton = new JButton("Add Employee");
-        editButton = new JButton("Edit Employee");
-        removeButton = new JButton("Remove Employee");
+        addEmployeeButton = new JButton("Add Employee");
+        editEmployeeButton = new JButton("Edit Employee");
+        removeEmployeeButton = new JButton("Remove Employee");
         refreshButton = new JButton("Refresh");
         manageEmployeesButton = new JButton("Manage Employees");
         EmploymentsButton = new JButton("Show All Emplyments");
@@ -64,9 +64,9 @@ public class ManageEmployeesView extends JPanel {
         add(title, BorderLayout.NORTH);
         add(new JScrollPane(employeesTable), BorderLayout.CENTER);
         JPanel buttons = new JPanel();
-        buttons.add(addButton);
-        buttons.add(editButton);
-        buttons.add(removeButton);
+        buttons.add(addEmployeeButton);
+        buttons.add(editEmployeeButton);
+        buttons.add(removeEmployeeButton);
         buttons.add(refreshButton);
         buttons.add(manageEmployeesButton);
         buttons.add(EmploymentsButton);
@@ -78,9 +78,9 @@ public class ManageEmployeesView extends JPanel {
     // LISTENERS
     private void initializeListeners() {
         refreshButton.addActionListener(e -> refreshTable());
-        addButton.addActionListener(e -> addEmployee());
-        editButton.addActionListener(e -> editEmployee());
-        removeButton.addActionListener(e -> removeEmployee());
+        addEmployeeButton.addActionListener(e -> addEmployee());
+        editEmployeeButton.addActionListener(e -> editEmployee());
+        removeEmployeeButton.addActionListener(e -> removeEmployee());
         manageEmployeesButton.addActionListener(e -> Boss.manageEmployees());
         EmploymentsButton.addActionListener(e -> Employment.showEmployments());
         PromoteEmployeeButton.addActionListener(e -> showPromotedEmployees());
@@ -125,7 +125,9 @@ public class ManageEmployeesView extends JPanel {
         if (row == -1) {JOptionPane.showMessageDialog(this, "Select employee.");
             return;
         }
-        int employeeId = (Integer) tableModel.getValueAt(row, 0);
+        int viewRow = employeesTable.getSelectedRow();
+        int modelRow = employeesTable.convertRowIndexToModel(viewRow);
+        int employeeId = (Integer) tableModel.getValueAt(modelRow, 0);
         Employee employee = Employee.findById(employeeId);
         if (employee == null) {
             JOptionPane.showMessageDialog(this, "Employee not found.");
@@ -137,6 +139,9 @@ public class ManageEmployeesView extends JPanel {
         if (option != JOptionPane.YES_OPTION) {
             return;
         }
+        Employment employment = employee.getCurrentEmployment();
+        if (employment != null)
+            employment.dismiss();
         employee.removeEmployee();
         refreshTable();
         JOptionPane.showMessageDialog(this, "Employee removed.");

@@ -6,16 +6,20 @@ import java.awt.*;
 public class BossDashboardView extends JFrame {
     private final JTabbedPane tabbedPane;
     private final Boss loggedBoss;
-    public BossDashboardView(Boss boss) {
+    private BossProductsPanel productsPanel;
+    private ManageEmployeesView employeesPanel;
+    public BossDashboardView(Boss loggedBoss) {
+        this.loggedBoss = loggedBoss;
+        productsPanel = new BossProductsPanel(loggedBoss);
+        employeesPanel = new ManageEmployeesView(loggedBoss);
         setTitle("Coffee House Management System - Owner Panel (BossDashboardView)");
         setSize(1200, 750);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
-        this.loggedBoss = boss;
         tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Products", new BossProductsPanel(loggedBoss));
-        tabbedPane.addTab("Employees", new ManageEmployeesView(loggedBoss));
+        tabbedPane.addTab("Products", productsPanel);
+        tabbedPane.addTab("Employees", employeesPanel);
         setLayout(new BorderLayout());
         add(createTopPanel(), BorderLayout.NORTH);
         add(tabbedPane, BorderLayout.CENTER);
@@ -32,5 +36,9 @@ public class BossDashboardView extends JFrame {
         panel.add(title, BorderLayout.WEST);
         panel.add(logoutButton, BorderLayout.EAST);
         return panel;
+    }
+    public void refreshTables() {
+        productsPanel.refreshTable();
+        employeesPanel.refreshTable();
     }
 }

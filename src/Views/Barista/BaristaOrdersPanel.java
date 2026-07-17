@@ -66,6 +66,8 @@ public class BaristaOrdersPanel extends JPanel {
         for (Order order : Order.getOrderExtent()) {
             if (order.getOrderStatus() != OrderStatus.NEW)
                 continue;
+            if (order.getProducts().isEmpty())
+                continue;
             System.out.println("Order: " + order.getOrderID());
             System.out.println("Products count: " + order.getProducts().size());
             StringBuilder products = new StringBuilder();

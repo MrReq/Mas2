@@ -6,24 +6,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import static java.util.stream.Collectors.toList;
 
-public class Order extends ObjectPlus{
-    private static final long serialVersionUID = 1L;
-    //=========================================================
-    // EXTENT
-    //=========================================================
-    @SuppressWarnings("unchecked")
-    public static List<Order> getOrderExtent() {
-        return (List<Order>)(List<?>) ObjectPlus.getExtent(Order.class);
-    }
-    public static void showExtent() {
-        System.out.println("===== ORDER EXTENT =====");
-        for (Order order : getOrderExtent()) {
-            System.out.println(order);
-        }
-    }
-    //=========================================================
-    // FIELDS
-    //=========================================================
+public class Order extends ObjectPlus {
     private static int counter = 1;
     private final int orderID;
     private Preparation preparation;
@@ -31,21 +14,34 @@ public class Order extends ObjectPlus{
     private final OrderType orderType;
     private OrderStatus orderStatus;
     private final LocalDateTime createdAt;
-    //do kompozycji
-    private String orderName;
-    private final List<Delivery> deliveries = new ArrayList<>();
-    private static Set<Delivery> allDeliveries = new HashSet<>();
-    private boolean shoppingCart = true;
-    private Delivery delivery;
-    //=========================================================
-    // ASSOCIATIONS
-    //=========================================================
     private Client client;
+    private Delivery delivery;
+    private boolean shoppingCart = true;
     private final List<Product> products = new ArrayList<>();
+    public static List<Order> getOrderExtent() {
+        return (List<Order>)(List<?>) ObjectPlus.getExtent(Order.class);
+    }
+    public int getOrderID() {
+        return orderID;
+    }
+    public List<Product> getProducts() {
+        return Collections.unmodifiableList(products);
+    }
 
-    //=========================================================
-    // CONSTRUCTORS
-    //=========================================================
+    public Client getClient() {
+        return client;
+    }
+    public boolean isShoppingCart() {
+        return shoppingCart;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public Preparation getPreparation() {
+        return preparation;
+    }
     public Order(Client client,
                  OrderType orderType) {
         if (orderType == null) {
@@ -62,261 +58,61 @@ public class Order extends ObjectPlus{
             client.addOrder(this);
         }
     }
-    public static Order createOrder(Client client,
-                                    OrderType type) {
-        if (client == null) {
-            throw new IllegalArgumentException(
-                    "Client cannot be null."
-            );
-        }
-        return new Order(client, type);
-    }
-
-    public boolean isShoppingCart() {
-        return shoppingCart;
-    }
-
-    public void setShoppingCart(boolean shoppingCart) {
-        this.shoppingCart = shoppingCart;
-    }
-
-    //Do kompozycji
-    public Delivery createDelivery(String address, String deliveryDate) {
-        if (delivery != null) {
-            throw new IllegalStateException("This order already has a delivery.");
-        }
-        delivery = Delivery.createDelivery(this, address, deliveryDate);
-        return delivery;
-    }
-    public Delivery getDelivery() {
-        return delivery;
-    }
-
-    public void addPart(Delivery delivery) throws Exception {
-        if(!deliveries.contains(delivery)) {
-            // Check if the part has been already added to any wholes
-            if(allDeliveries.contains(delivery)) {
-                throw new Exception("The part is already connected with a whole!");
-            }
-
-            deliveries.add(delivery);
-
-            // Store on the list of all parts
-            allDeliveries.add(delivery);
-        }
-    }
-
-    //=========================================================
-    // PRODUCTS
-    //=========================================================
-    public void addProduct(Product product) {
-        if (product == null) {
-            throw new IllegalArgumentException();
-        }
-        products.add(product);
-    }
-
-    public void addProduct(Product... products) {
-        for (Product product : products) {
-            addProduct(product);
-        }
-    }
-
-    public void removeProduct(Product product) {
-        if (product == null) {
-            return;
-        }
-        products.remove(product);
-    }
-
-    public void clearProducts() {
-        products.clear();
-    }
-    public boolean isEmpty() {
-        return products.isEmpty();
-    }
-    public int getProductsCount() {
-        return products.size();
-    }
-    public List<Product> getProducts() {
-        return Collections.unmodifiableList(products);
-    }
-    //=========================================================
-    // PRICE
-    //=========================================================
     public double countOrderValue() {
         return products.stream()
                 .mapToDouble(Product::getProductCost)
                 .sum();
     }
-
-    public void setTotalPrice(float totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public float getTotalPrice() {
-        setTotalPrice((float) countOrderValue());
-        return (float) countOrderValue();
-    }
-    //=========================================================
-    // CLIENT
-    //=========================================================
-    public Client getClient() {
-        return client;
-    }
-    public void setClient(Client client) {
-        if (this.client == client) {
+    public void removeProduct(Product product) {
+        if (product == null)
             return;
-        }
-        this.client = client;
-        if (client != null) {
-            client.addOrder(this);
-        }
+        products.remove(product);
     }
-    //=========================================================
-    // DELIVERY (COMPOSITION)
-    //=========================================================
-
-    public List<Delivery> getDeliveries() {
-        return deliveries;
-    }
-    //=========================================================
-    // GETTERS
-    //=========================================================
-    public int getOrderID() {
-        return orderID;
-    }
-    public OrderType getOrderType() {
-        return orderType;
-    }
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
+    public void setShoppingCart(boolean shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-
-    public Preparation getPreparation() {
-        return preparation;
+    public void addProduct(Product product) {
+        if (product == null)
+            throw new IllegalArgumentException();
+        products.add(product);
     }
-    //=========================================================
-    // BUSINESS METHODS
-    //=========================================================
-
-    /**
-     * Boss/Barista accepts order.
-     */
-    public void acceptOrder() {
-        if (orderStatus != OrderStatus.NEW) {
-            throw new IllegalStateException(
-                    "Only NEW orders can be accepted."
-            );
-        }
-        orderStatus = OrderStatus.ACCEPTED;
-    }
-    /**
-     * Barista starts preparing the order.
-     */
-    public void startPreparation(Barista barista) {
-        if (orderStatus != OrderStatus.ACCEPTED) {throw new IllegalStateException("Only accepted orders can be prepared.");}
-        orderStatus = OrderStatus.PREPARING;
-//        preparation = new Preparation(barista, this);
-    }
-    /**
-     * Barista finished preparing.
-     */
-    public void markAsReady(){
-        orderStatus = OrderStatus.READY;
-    }
-
-    public void completeOrder() {
-        if (orderStatus != OrderStatus.PREPARING) {
-            throw new IllegalStateException(
-                    "Only In preparing order can be completed."
-            );
-        }
-        orderStatus = OrderStatus.READY;
-    }
-    /**
-     * Waiter delivers the order.
-     */
-    public void deliver() {
-        if (orderStatus != OrderStatus.READY) {
-            throw new IllegalStateException(
-                    "Order is not READY."
-            );
-        }
-        orderStatus = OrderStatus.DELIVERED;
-    }
-    /**
-     * Cancel order.
-     */
-    public void cancelOrder() {
-        if (orderStatus == OrderStatus.DELIVERED) {
-            throw new IllegalStateException(
-                    "Delivered order cannot be cancelled."
-            );
-        }
-        orderStatus = OrderStatus.CANCELLED;
-    }
-    /**
-     * Generic status update.
-     */
     public void setOrderStatus(OrderStatus status) {
-        if (status == null) {
-            throw new IllegalArgumentException(
-                    "Status cannot be null."
-            );
-        }
+        if (status == null)
+            throw new IllegalArgumentException("Status cannot be null.");
         this.orderStatus = status;
     }
-
     public void setPreparation(Preparation preparation) {
         this.preparation = preparation;
     }
+    public void setClient(Client client) {
+        if (this.client == client)
+            return;
+        this.client = client;
+        if (client != null)
+            client.addOrder(this);
+    }
+    public Delivery getDelivery() {
+        return delivery;
+    }
+    public static void rebuildCounter() {
+        int maxId = 0;
+        for (Order order : getOrderExtent()) {
+            if (order.getOrderID() > maxId)
+                maxId = order.getOrderID();
+        }
+        counter = maxId + 1;
+    }
+    public void receivePayment() {
+        System.out.println(orderStatus);
+        if (orderStatus != OrderStatus.SERVED)
+            throw new IllegalStateException("Order must be SERVED.");
+        orderStatus = OrderStatus.PAID;
+        System.out.println(orderStatus);
+    }
 
-    /**
-     * Returns true if order is completed.
-     */
-    public boolean isCompleted() {
-        return orderStatus == OrderStatus.DELIVERED;
-    }
-    /**
-     * Returns true if order has been cancelled.
-     */
-    public boolean isCancelled() {
-        return orderStatus == OrderStatus.CANCELLED;
-    }
-    public boolean isNew() {
-        return orderStatus == OrderStatus.NEW;
-    }
-    public static List<Order> getActiveOrders() {
-        return getOrderExtent().stream()
-                .filter(order -> !order.isCompleted())
-                .filter(order -> !order.isCancelled())
-                .toList();
-    }
-    public static List<Order> getPreparingOrders() {
-        return getOrderExtent().stream()
-                .filter(order -> order.getOrderStatus() == OrderStatus.PREPARING)
-                .toList();
-    }
-    public static List<Order> getNewOrders() {
-        return getOrderExtent().stream().filter(order -> order.getOrderStatus() == OrderStatus.NEW).toList();
-    }
-    public static List<Order> getCompletedOrders() {
-        return getOrderExtent().stream()
-                .filter(Order::isCompleted)
-                .toList();
-    }
-    public static double calculateTotalIncome() {
-        return getOrderExtent().stream()
-                .mapToDouble(Order::countOrderValue)
-                .sum();
-    }
-    public int getNumberOfProducts() {
-        return products.size();
-    }
     public static Order findById(int orderID) {
         System.out.println("Searching for order ID = " + orderID);
         System.out.println("Orders in extent: " + getOrderExtent().size());
@@ -330,58 +126,12 @@ public class Order extends ObjectPlus{
         System.out.println("NOT FOUND");
         return null;
     }
-    @Override
-    public String toString() {
-        return String.format(
-                """
-                Order #%d
-                Type: %s
-                Status: %s
-                Client: %s
-                Products: %d
-                Value: %.2f PLN
-                Created: %s
-                """,
-                orderID,
-                orderType,
-                orderStatus,
-                client == null
-                        ? "No client"
-                        : client.getPersonName()
-                        + " "
-                        + client.getPeronSurname(),
-                products.size(),
-                countOrderValue(),
-                createdAt
-        );
-    }
-
-    public static void rebuildCounter() {
-        int maxId = 0;
-        for (Order order : getOrderExtent()) {
-            if (order.getOrderID() > maxId) {
-                maxId = order.getOrderID();
-            }
+    public static Order createOrder(Client client, OrderType type) {
+        if (client == null) {
+            throw new IllegalArgumentException("Client cannot be null.");
         }
-        counter = maxId + 1;
+        return new Order(client, type);
     }
-
-    public void serveOrder() {
-        System.out.println(orderStatus);
-        if (orderStatus != OrderStatus.READY) {
-            throw new IllegalStateException(
-                    "Only READY orders can be served."
-            );
-        }
-        orderStatus = OrderStatus.SERVED;
-        System.out.println("Current status = " + orderStatus);
-        try {
-            Delivery.createDelivery(this, "Delivery","dzisiaj");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static List<Order> getReadyOrders() {
         List<Order> result = new ArrayList<>();
         for (Order order : getOrderExtent()) {
@@ -411,14 +161,38 @@ public class Order extends ObjectPlus{
         }
         return result;
     }
-    public void receivePayment() {
-        System.out.println(orderStatus);
-        if (orderStatus != OrderStatus.SERVED) {
+    public static List<Order> getPreparingOrders() {
+        return getOrderExtent().stream()
+                .filter(order -> order.getOrderStatus() == OrderStatus.PREPARING)
+                .toList();
+    }
+    public static List<Order> getNewOrders() {
+        return getOrderExtent().stream().filter(order -> order.getOrderStatus() == OrderStatus.NEW)
+                .filter(o -> !o.getProducts().isEmpty())
+                .toList();
+    }
+    public static List<Order> getCompletedOrders() {
+        return getOrderExtent().stream()
+                .filter(Order::isCompleted)
+                .toList();
+    }
+    public void acceptOrder() {
+        if (orderStatus != OrderStatus.NEW) {
             throw new IllegalStateException(
-                    "Order must be SERVED."
+                    "Only NEW orders can be accepted."
             );
         }
-        orderStatus = OrderStatus.PAID;
-        System.out.println(orderStatus);
+        orderStatus = OrderStatus.ACCEPTED;
+    }
+    public boolean isCompleted() {
+        return orderStatus == OrderStatus.DELIVERED;
+    }
+    public void startPreparation(Barista barista) {
+        if (orderStatus != OrderStatus.ACCEPTED) {throw new IllegalStateException("Only accepted orders can be prepared.");}
+        orderStatus = OrderStatus.PREPARING;
+//        preparation = new Preparation(barista, this);
+    }
+    public void markAsReady(){
+        orderStatus = OrderStatus.READY;
     }
 }

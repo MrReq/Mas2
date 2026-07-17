@@ -80,7 +80,7 @@ public class BossProductsPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Number of Products:\n\n" + loggedBoss.showNumberOfProducts());});
     }
     // TABLE
-    private void refreshTable() {
+    public void refreshTable() {
         tableModel.setRowCount(0);
         for(Product product : Product.getProductExtent())
             tableModel.addRow(new Object[]{product.getProductID(), product.getProductName(), product.getProductCost(),
@@ -89,7 +89,7 @@ public class BossProductsPanel extends JPanel {
     }
     // ADD PRODUCT
     private void createProduct() {
-        new AddNewProductView().setVisible(true);
+        new AddNewProductView(this).setVisible(true);
         refreshTable();
     }
     // EDIT PRODUCT

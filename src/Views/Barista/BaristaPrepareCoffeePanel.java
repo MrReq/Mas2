@@ -108,7 +108,7 @@ public class BaristaPrepareCoffeePanel extends JPanel {
                     order.getClient(),
                     productsText,
                     order.getProducts().size(),
-                    order.getTotalPrice(),
+                    order.countOrderValue(),
                     preparation.getStartTime().format(formatter),
                     preparationTime,
                     preparation.getBarista().getPersonName() + preparation.getBarista().getPeronSurname(),

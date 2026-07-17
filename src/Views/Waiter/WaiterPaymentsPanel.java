@@ -58,7 +58,7 @@ public class WaiterPaymentsPanel extends JPanel {
                     order.getOrderID(),
                     order.getClient().getPersonName() + " " + order.getClient().getPeronSurname(),
                     products.toString(),
-                    order.getTotalPrice(),
+                    order.countOrderValue(),
                     order.getOrderStatus()
             });
         }

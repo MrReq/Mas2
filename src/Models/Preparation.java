@@ -6,13 +6,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 public class Preparation extends ObjectPlus implements Serializable {
     private static final long serialVersionUID = 1L;
-    // ATTRIBUTES
     private Barista barista;
     private Order order;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    // CONSTRUCTOR
-
     public Preparation(Barista barista, Order order) {
         System.out.println("NEW PREPARATION -> Order " + order.getOrderID());
         if (barista == null) {
@@ -27,8 +24,6 @@ public class Preparation extends ObjectPlus implements Serializable {
         barista.addPreparation(this);
         this.startTime = LocalDateTime.now();
     }
-    // EXTENT
-
     @SuppressWarnings("unchecked")
     public static List<Preparation> getPreparationExtent() {
         return (List<Preparation>)(List<?>) ObjectPlus.getExtent(Preparation.class);
@@ -37,12 +32,10 @@ public class Preparation extends ObjectPlus implements Serializable {
     // BUSINESS METHODS
     public void finishPreparation() {endTime = LocalDateTime.now();}
     public Duration getPreparationTime() {
-        if (endTime == null) {
+        if (endTime == null)
             return Duration.between(startTime, LocalDateTime.now());
-        }
         return Duration.between(startTime, endTime);
     }
-    // GETTERS
     public Barista getBarista() {
         return barista;
     }
@@ -55,7 +48,6 @@ public class Preparation extends ObjectPlus implements Serializable {
     public LocalDateTime getEndTime() {
         return endTime;
     }
-    // OBJECT METHODS
     @Override
     public String toString() {
         return "Preparation{" + "barista=" + barista.getPersonName() +

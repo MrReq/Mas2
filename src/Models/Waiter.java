@@ -84,9 +84,8 @@ public class Waiter extends Employee {
         return servedDeliveries.size();
     }
     public void receivePayment(Order order) {
-        if (order == null) {
+        if (order == null)
             throw new IllegalArgumentException("Order cannot be null.");
-        }
         order.receivePayment();
     }
     public double countTips() {
@@ -103,5 +102,4 @@ public class Waiter extends Employee {
                 .average()
                 .orElse(0.0);
     }
-
 }

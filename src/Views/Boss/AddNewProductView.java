@@ -14,8 +14,10 @@ public class AddNewProductView extends JFrame {
     private JComboBox<CoffeeCountry> coffeeCountryComboBox;
     private JButton createButton;
     private JButton cancelButton;
+    private BossProductsPanel bossProductsPanel;
     // CONSTRUCTOR
-    public AddNewProductView() {
+    public AddNewProductView(BossProductsPanel bossProductsPanel) {
+        this.bossProductsPanel = bossProductsPanel;
         initializeFrame();
         initializeComponents();
         initializeLayout();
@@ -139,5 +141,6 @@ public class AddNewProductView extends JFrame {
         catch (NumberFormatException ex){
             JOptionPane.showMessageDialog(this, "Invalid price.");
         }
+        bossProductsPanel.refreshTable();
     }
 }

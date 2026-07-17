@@ -1,44 +1,27 @@
 package Models;
-
 import Enums.Sex;
 import SecondaryClasses.ObjectPlus;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
-
 public abstract class Person extends ObjectPlus {
-
     private static final long serialVersionUID = 1L;
-
-    // ================================= COUNTER =================================
-
     private static int counter = 1;
 
     public static LocalDate now = LocalDate.now();
-
-    // ================================= ATTRIBUTES =================================
-
     protected String personName;
     protected String peronSurname;
     protected LocalDate personDateOfBirth;
     protected Sex personSex;
     protected int age;
-
-    // ================================= CONSTRUCTORS =================================
-
     public Person() {
         super();
     }
-
     public Person(String name, String surname) {
         super();
         this.personName = name;
         this.peronSurname = surname;
     }
-
     public Person(String name, String surname, LocalDate dateOfBirth, Sex sex) {
         super();
         this.personName = name;
@@ -47,9 +30,6 @@ public abstract class Person extends ObjectPlus {
         this.personSex = sex;
         counter++;
     }
-
-    // ================================= EXTENT =================================
-
     @SuppressWarnings("unchecked")
     public static List<Person> getPersonExtent() {
         return (List<Person>) (List<?>) ObjectPlus.getExtent(Person.class);
@@ -71,7 +51,10 @@ public abstract class Person extends ObjectPlus {
         return personSex;
     }
     public int getAge() {
-        return age;
+        if (personDateOfBirth == null) {
+            return 0;
+        }
+        return Period.between(personDateOfBirth, LocalDate.now()).getYears();
     }
     public static LocalDate getNow() {
         return now;

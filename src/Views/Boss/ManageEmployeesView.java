@@ -91,7 +91,20 @@ public class ManageEmployeesView extends JPanel {
             JOptionPane.showMessageDialog(this, "Number of Employees:\n\n" + loggedBoss.showNumberOfEmployees());});
         showNumberOfClients.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, "Number of Clients:\n\n" + loggedBoss.showNumberOfClients());});
-        showTheMethodOverload.addActionListener();
+        showTheMethodOverload.addActionListener(e -> {
+            String salaryText = JOptionPane.showInputDialog(this, "Max salary:");
+            if (salaryText == null || salaryText.isBlank())
+                return;
+            float salary = Float.parseFloat(salaryText);
+            String letter = JOptionPane.showInputDialog(this, "First letter (optional):");
+            if (letter == null || letter.isBlank()) {
+                JOptionPane.showMessageDialog(this,
+                        Employee.findEmployeesWithLowerSalaryThan(salary));
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        Employee.findEmployeesWithLowerSalaryThan(salary, letter.charAt(0)));
+            }
+        });
     }
     // TABLE
     public void refreshTable() {

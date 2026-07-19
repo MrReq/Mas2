@@ -20,9 +20,8 @@ public abstract class Product extends ObjectPlus implements Preparable {
     TemperatureOfTheService temperatureOfTheService;
     static List<Product> products;
 
-    @SuppressWarnings("unchecked")
-    List<Product> productsExtent =
-            (List<Product>)(List<?>)ObjectPlus.getExtent(Product.class);
+    List<Product> productsExtent = ObjectPlus.getExtent(Product.class);
+
     public static List<Product> getProductExtent() {
         List<Product> result = new ArrayList<>();
         result.addAll((List<Product>)(List<?>)ObjectPlus.getExtent(Americano.class));

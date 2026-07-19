@@ -6,9 +6,8 @@ import java.util.List;
 public class HighExperienced extends Employee {
     private static final long serialVersionUID = 1L;
     // EXTENT
-    @SuppressWarnings("unchecked")
     public static List<HighExperienced> getHighExperiencedExtent() {
-        return (List<HighExperienced>) (List<?>) ObjectPlus.getExtent(HighExperienced.class);
+        return ObjectPlus.getExtent(HighExperienced.class);
     }
     public static void showExtent() {
         System.out.println("===== HIGH EXPERIENCED EXTENT =====");

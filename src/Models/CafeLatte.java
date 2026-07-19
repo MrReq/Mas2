@@ -10,7 +10,7 @@ public class CafeLatte extends Coffee implements Preparable {
     public CafeLatte() {}
     // EXTENT
     public static List<CafeLatte> getCafeLatteExtent() {
-        return (List<CafeLatte>) (List<?>) ObjectPlus.getExtent(CafeLatte.class);
+        return ObjectPlus.getExtent(CafeLatte.class);
     }
     TypeOfMilk typeOfMilk;
     double milkAmount;

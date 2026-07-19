@@ -12,9 +12,8 @@ public class Employment extends ObjectPlus implements Serializable {
     private final LocalDate employmentDate;
     private LocalDate dismissalDate;
     // EXTENT
-    @SuppressWarnings("unchecked")
     public static List<Employment> getEmploymentExtent() {
-        return (List<Employment>) (List<?>) ObjectPlus.getExtent(Employment.class);
+        return ObjectPlus.getExtent(Employment.class);
     }
     public Employment(Boss boss, Employee employee, LocalDate employmentDate) {
         if (boss == null)

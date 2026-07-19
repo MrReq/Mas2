@@ -23,9 +23,8 @@ public class Barista extends Employee {
         this.preparation = preparation;
     }
     // EXTENT
-    @SuppressWarnings("unchecked")
     public static List<Barista> getBaristaExtent() {
-        return (List<Barista>) (List<?>) ObjectPlus.getExtent(Barista.class);
+        return ObjectPlus.getExtent(Barista.class);
     }
     // GETTERS
     public CoffeeCountry getFavouriteCoffeeCountry() {

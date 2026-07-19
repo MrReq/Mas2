@@ -7,9 +7,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-public class Delivery implements Serializable {
+public class Delivery extends ObjectPlus {
     public static List<Delivery> getDeliveryExtent() {
-        return (List<Delivery>) (List<?>) ObjectPlus.getExtent(Delivery.class);
+        return  ObjectPlus.getExtent(Delivery.class);
     }
     private static int counter = 1;
 

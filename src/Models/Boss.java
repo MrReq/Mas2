@@ -37,9 +37,8 @@ public class Boss extends Person {
         this.password = password;
     }
     // EXTENT
-    @SuppressWarnings("unchecked")
     public static List<Boss> getBossExtent() {
-        return (List<Boss>) (List<?>) ObjectPlus.getExtent(Boss.class);
+        return ObjectPlus.getExtent(Boss.class);
     }
     // GETTERS
     public String getPassword() {

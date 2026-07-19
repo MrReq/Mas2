@@ -10,9 +10,8 @@ public class Cleaner extends Employee {
     public String toString() {
         return "Cleaner: " + personName + ", id: " + super.toString();
     }
-    @SuppressWarnings("unchecked")
     public static List<Cleaner> getCleanerExtent() {
-        return (List<Cleaner>) (List<?>) ObjectPlus.getExtent(Cleaner.class);
+        return ObjectPlus.getExtent(Cleaner.class);
     }
     Shift shift;
     String assignedArea;

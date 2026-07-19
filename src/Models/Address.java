@@ -1,7 +1,12 @@
 package Models;
 import SecondaryClasses.ObjectPlus;
 import java.io.Serializable;
+import java.util.List;
+
 public class Address extends ObjectPlus {
+    public static List<Address> getAddressExtent() {
+        return ObjectPlus.getExtent(Address.class);
+    }
     private String street;
     private String city;
     private String postalCode;

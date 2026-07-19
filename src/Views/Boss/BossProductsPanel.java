@@ -114,8 +114,13 @@ public class BossProductsPanel extends JPanel {
                 JOptionPane.YES_NO_OPTION);
         if(option != JOptionPane.YES_OPTION)
             return;
-        Product product = Product.getProductExtent().get(row);
-        JOptionPane.showMessageDialog(this, product.getProductName() + " removed.");
+        int modelRow = productsTable.convertRowIndexToModel(row);
+        int productID = (Integer) tableModel.getValueAt(modelRow, 0);
+        Product product = Product.findById(productID);
+        if (product != null) {
+            product.removeFromExtent();
+            JOptionPane.showMessageDialog(this, product.getProductName() + " removed.");
+        }
         refreshTable();
     }
 }

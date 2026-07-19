@@ -2,8 +2,15 @@ package Models;
 import Enums.CoffeeCountry;
 import Enums.TemperatureOfTheService;
 import Interfaces.Preparable;
+import SecondaryClasses.ObjectPlus;
+
+import java.util.List;
+
 public class Espresso extends Coffee  implements Preparable {
     private static final long serialVersionUID = 1L;
+    public static List<Espresso> getEspressoExtent() {
+        return ObjectPlus.getExtent(Espresso.class);
+    }
     @Override
     public String toString() {
         return "Espresso: " + productName + ", id: " + super.toString();

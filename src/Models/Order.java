@@ -20,7 +20,7 @@ public class Order extends ObjectPlus {
     private boolean shoppingCart = true;
     private final List<Product> products = new ArrayList<>();
     public static List<Order> getOrderExtent() {
-        return (List<Order>)(List<?>) ObjectPlus.getExtent(Order.class);
+        return ObjectPlus.getExtent(Order.class);
     }
     public int getOrderID() {
         return orderID;

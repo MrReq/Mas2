@@ -6,9 +6,8 @@ import SecondaryClasses.ObjectPlus;
 import java.util.List;
 public class Americano extends Coffee implements Preparable {
     private static final long serialVersionUID = 1L;
-    @SuppressWarnings("unchecked")
-    public static List<Americano> getBaristaExtent() {
-        return (List<Americano>) (List<?>) ObjectPlus.getExtent(Americano.class);
+    public static List<Americano> getAmericanoExtent() {
+        return ObjectPlus.getExtent(Americano.class);
     }
     @Override
     public String toString() {

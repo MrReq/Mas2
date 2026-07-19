@@ -29,9 +29,8 @@ public class Waiter extends Employee {
         super(name, surname, birthDate, sex, salary);
     }
     // EXTENT
-    @SuppressWarnings("unchecked")
     public static List<Waiter> getWaiterExtent() {
-        return (List<Waiter>) (List<?>) ObjectPlus.getExtent(Waiter.class);
+        return ObjectPlus.getExtent(Waiter.class);
     }
     // GETTERS
     public List<Delivery> getServedDeliveries() {

@@ -34,9 +34,61 @@ public class LoginSelectionView extends JFrame {
 
         tabbedPane.addTab("Project Description", new ProjectDescriptionPanel());
 
-        tabbedPane.addTab("Extension",new JOptionPane("Here is the message about extension",JOptionPane.INFORMATION_MESSAGE));
+        tabbedPane.addTab("Extension",new JOptionPane("Here is the message about extension.\n" +
+                "There are 2 main classes for extension.\n" +
+                "The most native class is ObjectPlusPlus it has these elements:\n" +
+                "private Map<String, Map<Object, ObjectPlusPlus>> links = new Hashtable<>();\n" +
+                "private static Set<ObjectPlusPlus> allParts = new HashSet<>();\n" +
+                "protected ObjectPlusPlus() { super();}\n" +
+                "private void addLink(String roleName, String reverseRoleName, ObjectPlusPlus targetObject, Object qualifier, int counter)\n" +
+                "public void addLink(String roleName, String reverseRoleName, ObjectPlusPlus targetObject)\n" +
+                "public void addLink(String roleName, String reverseRoleName, ObjectPlusPlus targetObject, Object qualifier)\n" +
+                "public void addPart(String roleName, String reverseRoleName, ObjectPlusPlus partObject) throws Exception\n" +
+                "public ObjectPlusPlus[] getLinks(String roleName) throws Exception\n" +
+                "public void showLinks(String roleName, PrintStream stream) throws Exception\n" +
+                "public ObjectPlusPlus getLinkedObject(String roleName, Object qualifier) throws Exception\n" +
+                "public boolean anyLink(String roleName) \n" +
+                "The second class is ObjectPlus which extends ObjectPlusPlus. Here are properties:\n" +
+                "private static Map<Class, List> allExtents = new HashMap<>(); \n" +
+                "protected ObjectPlus()\n" +
+                "public static <T extends ObjectPlus> List<T> getExtent(Class<T> type)\n" +
+                "public static void showExtent(Class type)\n" +
+                "public void removeFromExtent()\n" +
+                "public static void saveExtents(String fileName) throws IOException\n" +
+                "public static void loadExtents(String fileName) throws IOException, ClassNotFoundException\n" +
+                "public static void clearExtents()\n" +
+                "public static Set<Class> getRegisteredClasses()\n",JOptionPane.INFORMATION_MESSAGE));
 
-        tabbedPane.addTab("Extension – durability", new JOptionPane("Here is the message about durability of extension",JOptionPane.INFORMATION_MESSAGE));
+        tabbedPane.addTab("Extension – durability", new JOptionPane("<html>" +
+                                "The project implements an extent persistence mechanism, whose purpose is to preserve all created objects between subsequent executions of the application.<br>" +
+                                "The solution is implemented in the ObjectPlus class, which serves as the superclass for all domain classes that require extent management.<br><br>" +
+                                "Whenever a new object is created, it is automatically added to its corresponding extent by the constructor of the ObjectPlus class.<br>" +
+                                "All extents are stored in a static map named allExtents, where the key represents the object's class and the value is a list containing all instances of that class.<br><br>" +
+                                "The persistence mechanism is based on Java serialization using ObjectOutputStream.<br>" +
+                                "The saveExtents(String fileName) method serializes the entire allExtents structure and stores it in the specified file.<br>" +
+                                "As a result, every object together with its current state can be restored after restarting the application.<br><br>" +
+                                "Loading previously saved data is performed by the loadExtents(String fileName) method, which uses ObjectInputStream.<br>" +
+                                "If the persistence file exists, the serialized data are deserialized and assigned back to the allExtents map, restoring all previously saved extents.<br><br>" +
+                                "In this project, extent persistence covers all classes inheriting from ObjectPlus, including:<br><br>" +
+                                "• Barista<br>" +
+                                "• Boss<br>" +
+                                "• Cleaner<br>" +
+                                "• Client<br>" +
+                                "• WorkingClient<br>" +
+                                "• Order<br>" +
+                                "• Preparation<br>" +
+                                "• Employment<br>" +
+                                "• Delivery<br>" +
+                                "• Address<br>" +
+                                "• Americano<br>" +
+                                "• CafeLatte<br>" +
+                                "• Espresso<br>" +
+                                "• Milk<br><br>" +
+                                "As a result, after restarting the application, there is no need to recreate domain objects manually.<br>" +
+                                "All previously stored objects are automatically restored from the persistence file.<br><br>" +
+                                "This solution ensures consistency of the object model and fulfills the extent persistence requirement defined by the Modeling and Systems Analysis (MAS) methodology." +
+                                "</html>", JOptionPane.INFORMATION_MESSAGE)
+        );
 
         tabbedPane.addTab("Composite attribute", new JOptionPane("Here is the message about Composite attribute",JOptionPane.INFORMATION_MESSAGE));
 
@@ -113,7 +165,26 @@ public class LoginSelectionView extends JFrame {
                 "16. The `Order` class has an `orderID`, preparation details, `OrderType`, `orderStatus`, `createdAt` timestamp, and delivery information.\n" +
                 "15. When a Barista accepts an order, a `Preparation` object is created. This association class stores the following attributes: the Barista performing the preparation, the Order being prepared, and the start and end times of the preparation.",JOptionPane.INFORMATION_MESSAGE));
 
-        tabbedPane.addTab("Use case diagram", new JOptionPane("Here is the message about Use case diagram",JOptionPane.INFORMATION_MESSAGE));
+
+        ImageIcon icon1 = new ImageIcon("src/images/Actors Inheritance.png");
+        ImageIcon icon2 = new ImageIcon("src/images/UseCase Diagram.png");
+        System.out.println(icon1.getIconWidth() + " x " + icon1.getIconHeight());
+        System.out.println(icon2.getIconWidth() + " x " + icon2.getIconHeight());
+        JLabel label1 = new JLabel(icon1);
+        JLabel label2 = new JLabel(icon2);
+        JPanel panel2 = new JPanel();
+        panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+        label1.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel2.add(label1);
+        panel2.add(Box.createVerticalStrut(20));
+        panel2.add(label2);
+        panel2.revalidate();
+        panel2.repaint();
+        JScrollPane scroll = new JScrollPane(panel2);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+        tabbedPane.addTab("Use case diagram", scroll);
+
 
         tabbedPane.addTab("Non-functional requirements as a list", new JOptionPane("Here is the message about Non-functional requirements as a list",JOptionPane.INFORMATION_MESSAGE));
 

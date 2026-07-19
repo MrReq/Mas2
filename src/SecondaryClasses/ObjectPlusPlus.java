@@ -3,89 +3,97 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.*;
 public abstract class ObjectPlusPlus extends ObjectPlus implements Serializable {
-    /** Stores information about all connections of this object. */
+    private static final long serialVersionUID = 1L;
+    /**
+     * role -> qualifier -> object
+     */
     private Map<String, Map<Object, ObjectPlusPlus>> links = new Hashtable<>();
-    /** Stores information about all parts connected with any objects. */
-    private static Set<ObjectPlusPlus> allParts = new HashSet<>();
-    public ObjectPlusPlus() {
+    /**
+     * Stores all composition parts.
+     */
+    private static Set<ObjectPlusPlus> allParts =
+            new HashSet<>();
+    protected ObjectPlusPlus() {
         super();
     }
+    /**
+     * Internal method for creating bidirectional links.
+     */
     private void addLink(String roleName, String reverseRoleName, ObjectPlusPlus targetObject, Object qualifier, int counter) {
-        Map<Object, ObjectPlusPlus> objectLinks;
-        // Protection for the reverse connection
-        if(counter < 1) {
+        if (counter < 1)
             return;
+        if (roleName == null ||
+                reverseRoleName == null ||
+                targetObject == null ||
+                qualifier == null) {
+            throw new IllegalArgumentException();
         }
-        // Find a collection of links for the role
-        if(links.containsKey(roleName)) {
-            // Get the links
+        Map<Object, ObjectPlusPlus> objectLinks;
+        if (links.containsKey(roleName)) {
             objectLinks = links.get(roleName);
-        }
-        else {
-            // No links ==> create them
+        } else {
             objectLinks = new HashMap<>();
             links.put(roleName, objectLinks);
         }
-        // Check if there is already the connection
-        // If yes, then ignore the creation
-        if(!objectLinks.containsKey(qualifier)) {
-            // Add a link for the target object
+        if (!objectLinks.containsKey(qualifier)) {
             objectLinks.put(qualifier, targetObject);
-            // Add the reverse connection
             targetObject.addLink(reverseRoleName, roleName, this, this, counter - 1);
         }
     }
-    public void addLink(String roleName, String reverseRoleName, ObjectPlusPlus targetObject, Object qualifier) {
-        addLink(roleName, reverseRoleName, targetObject, qualifier, 2);
-    }
+
+    /**
+     * Ordinary association.
+     */
     public void addLink(String roleName, String reverseRoleName, ObjectPlusPlus targetObject) {
         addLink(roleName, reverseRoleName, targetObject, targetObject);
     }
+    /**
+     * Qualified association.
+     */
+    public void addLink(String roleName, String reverseRoleName, ObjectPlusPlus targetObject, Object qualifier) {
+        addLink(roleName, reverseRoleName, targetObject, qualifier, 2);
+    }
+    /**
+     * Composition.
+     */
     public void addPart(String roleName, String reverseRoleName, ObjectPlusPlus partObject) throws Exception {
-        // Check if the part exist somewhere
-        if(allParts.contains(partObject)) {
+        if (partObject == null)
+            throw new IllegalArgumentException();
+        if (allParts.contains(partObject))
             throw new Exception("The part is already connected to a whole!");
-        }
         addLink(roleName, reverseRoleName, partObject);
-        // Store adding the object as a part
         allParts.add(partObject);
     }
-    public ObjectPlusPlus[] getLinks(String roleName) throws Exception {
-        Map<Object, ObjectPlusPlus> objectLinks;
-        if(!links.containsKey(roleName)) {
-            // No links for the role
+    /**
+     * Returns all linked objects for given role.
+     */
+    public ObjectPlusPlus[] getLinks(String roleName)
+            throws Exception {
+        if (!links.containsKey(roleName)) {
             throw new Exception("No links for the role: " + roleName);
         }
-        objectLinks = links.get(roleName);
-        return (ObjectPlusPlus[]) objectLinks.values().toArray(new ObjectPlusPlus[0]);
+        Collection<ObjectPlusPlus> values =
+                links.get(roleName).values();
+        return values.toArray(new ObjectPlusPlus[0]);
     }
     public void showLinks(String roleName, PrintStream stream) throws Exception {
-        Map<Object, ObjectPlusPlus> objectLinks;
-        if(!links.containsKey(roleName)) {
-            // No links
+        if (!links.containsKey(roleName))
             throw new Exception("No links for the role: " + roleName);
-        }
-        objectLinks = links.get(roleName);
-        Collection col = objectLinks.values();
-        stream.println(this.getClass().getSimpleName() + " links, role '" + roleName + "':");
-        for(Object obj : col) {
+        stream.println(getClass().getSimpleName() + " links, role '" + roleName + "':");
+        for (Object obj : links.get(roleName).values())
             stream.println("   " + obj);
-        }
     }
     public ObjectPlusPlus getLinkedObject(String roleName, Object qualifier) throws Exception {
-        Map<Object, ObjectPlusPlus> objectLinks;
-        if(!links.containsKey(roleName)) {
-            // No links
+        if (!links.containsKey(roleName))
             throw new Exception("No links for the role: " + roleName);
-        }
-        objectLinks = links.get(roleName);
-        if(!objectLinks.containsKey(qualifier)) {
-            // No link for the qualifer
-            throw new Exception("No link for the qualifer: " + qualifier);
-        }
+        Map<Object, ObjectPlusPlus> objectLinks =
+                links.get(roleName);
+        if (!objectLinks.containsKey(qualifier))
+            throw new Exception("No link for qualifier: " + qualifier);
         return objectLinks.get(qualifier);
     }
     public boolean anyLink(String roleName) {
-        return links.containsKey(roleName) && !links.get(roleName).isEmpty();
+        return links.containsKey(roleName)
+                && !links.get(roleName).isEmpty();
     }
 }

@@ -3,65 +3,78 @@ import java.io.*;
 import java.util.*;
 public abstract class ObjectPlus implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static Map<Class<? extends ObjectPlus>,
-            List<ObjectPlus>> extents = new HashMap<>();
+    /**
+     * Stores extents of all classes.
+     */
+    private static Map<Class, List> allExtents = new HashMap<>();
     protected ObjectPlus() {
-        Class<? extends ObjectPlus> clazz = getClass();
-        extents.computeIfAbsent(clazz, c -> new ArrayList<>());
-        extents.get(clazz).add(this);
+        Class theClass = this.getClass();
+        if (!allExtents.containsKey(theClass))
+            allExtents.put(theClass, new ArrayList());
+        allExtents.get(theClass).add(this);
     }
-    @SuppressWarnings("unchecked")
-    public static List<ObjectPlus> getExtent(Class<?> clazz) {
-        return Collections.unmodifiableList(extents.getOrDefault(clazz, new ArrayList<>()));
+    /**
+     * Returns extent of given class.
+     */
+    public static <T extends ObjectPlus> List<T> getExtent(Class<T> type) {
+        List<ObjectPlus> extent = allExtents.get(type);
+        if (extent == null)
+            return Collections.emptyList();
+        List<T> result = new ArrayList<>();
+        for (ObjectPlus object : extent) {
+            result.add(type.cast(object));
+        }
+        return Collections.unmodifiableList(result);
+    }
+    /**
+     * Prints extent.
+     */
+    public static void showExtent(Class type) {
+        System.out.println();
+        System.out.println("==============================");
+        System.out.println("Extent of " + type.getSimpleName());
+        System.out.println("==============================");
+        for (Object obj : getExtent(type))
+            System.out.println(obj);
     }
 
-    
-    public static void showExtent(Class<? extends ObjectPlus> clazz) {
-        System.out.println();
-        System.out.println("========================================");
-        System.out.println("Extent of " + clazz.getSimpleName());
-        System.out.println("========================================");
-        List<? extends ObjectPlus> list = getExtent(clazz);
-        if(list.isEmpty()){
-            System.out.println("No objects.");
-            return;
-        }
-        for(ObjectPlus object : list)
-            System.out.println(object);
+    /**
+     * Removes object from extent.
+     */
+    public void removeFromExtent() {
+        Class<?> theClass = getClass();
+        if (allExtents.containsKey(theClass))
+            allExtents.get(theClass).remove(this);
     }
-    protected void removeFromExtent(){
-        Class<? extends ObjectPlus> clazz = getClass();
-        List<ObjectPlus> list = extents.get(clazz);
-        if(list != null)
-            list.remove(this);
-    }
+    /**
+     * Saves all extents.
+     */
     public static void saveExtents(String fileName) throws IOException {
-        System.out.println("=== SAVING EXTENTS ===");
-        System.out.println("Classes: " + extents.keySet());
-        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
-            out.writeObject(extents);
-            System.out.println("Saved successfully!");
-        }
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
+        out.writeObject(allExtents);
+        out.close();
     }
-    @SuppressWarnings("unchecked")
-    public static void loadExtents(String fileName)
-            throws IOException, ClassNotFoundException {
-        System.out.println("=== LOADING EXTENTS ===");
+    /**
+     * Loads all extents.
+     */
+    public static void loadExtents(String fileName) throws IOException, ClassNotFoundException {
         File file = new File(fileName);
-        if(!file.exists()){
-            System.out.println("File doesn't exist!");
+        if (!file.exists())
             return;
-        }
-        try(ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))){
-            extents = (Map<Class<? extends ObjectPlus>, List<ObjectPlus>>) in.readObject();
-            System.out.println("Loaded!");
-            System.out.println(extents.keySet());
-        }
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+        allExtents = (HashMap<Class, List>) in.readObject();
+        in.close();
     }
-    public static void clearExtents(){
-        extents.clear();
+    /**
+     * Clears all extents.
+     */
+    public static void clearExtents() {
+        allExtents.clear();
     }
-    public static Set<Class<? extends ObjectPlus>> getRegisteredClasses() {
-        return extents.keySet();
+    /**
+     * Returns registered classes.
+     */
+    public static Set<Class> getRegisteredClasses() {
+        return allExtents.keySet();
     }
 }

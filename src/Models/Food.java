@@ -10,9 +10,8 @@ public class Food extends Product {
     public String toString() {
         return "Food: " + productName + " " + super.toString() +" "+ weight + " " + typeOfMeal + " " + doneness;
     }
-    @SuppressWarnings("unchecked")
     public static List<Food> getFoodExtent() {
-        return (List<Food>) (List<?>) ObjectPlus.getExtent(Food.class);
+        return ObjectPlus.getExtent(Food.class);
     }
     double weight;
     TypeOfMeal typeOfMeal;

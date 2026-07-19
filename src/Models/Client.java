@@ -40,9 +40,8 @@ public class Client extends Person {
         this.hasClubCard = hasClubCard;
         this.citizenship = citizenship;
     }
-    @SuppressWarnings("unchecked")
     public static List<Client> getClientExtent() {
-        return (List<Client>)(List<?>) ObjectPlus.getExtent(Client.class);
+        return ObjectPlus.getExtent(Client.class);
     }
     public static boolean clientExists(String name,
                                        String surname,

@@ -24,10 +24,8 @@ public class Preparation extends ObjectPlus implements Serializable {
         barista.addPreparation(this);
         this.startTime = LocalDateTime.now();
     }
-    @SuppressWarnings("unchecked")
     public static List<Preparation> getPreparationExtent() {
-        return (List<Preparation>)(List<?>) ObjectPlus.getExtent(Preparation.class);
-
+        return ObjectPlus.getExtent(Preparation.class);
     }
     // BUSINESS METHODS
     public void finishPreparation() {endTime = LocalDateTime.now();}

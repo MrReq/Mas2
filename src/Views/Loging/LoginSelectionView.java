@@ -179,6 +179,15 @@ public class LoginSelectionView extends JFrame {
 
         tabbedPane.addTab("Association with an attribute", new JOptionPane("Here is the message about Association with an attribute",JOptionPane.INFORMATION_MESSAGE));
 
+        tabbedPane.addTab("Qualified Association", new JOptionPane(
+                        "The project implements a qualified association between the Client and Order classes.\n"
+                                + "The Client class stores orders in a TreeMap<Integer, Order>, where the unique orderID acts as the qualifier.\n"
+                                + "This allows direct access to a specific Order object without searching through the entire collection.\n"
+                                + "When a new order is added, it is stored in the map using its orderID as the key.\n"
+                                + "The reverse association is maintained by assigning the corresponding Client to the Order object.", JOptionPane.INFORMATION_MESSAGE));
+
+        tabbedPane.addTab("Composition", new JOptionPane("Here is the message about Association with an attribute",JOptionPane.INFORMATION_MESSAGE));
+
         tabbedPane.addTab("Disjoint", new JOptionPane("Here is the message about Disjoint",JOptionPane.INFORMATION_MESSAGE));
 
         tabbedPane.addTab("Abstract class", new JOptionPane("Here is the message about Abstract class",JOptionPane.INFORMATION_MESSAGE));
